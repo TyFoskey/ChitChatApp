@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class MessageViewModel {
     
     let message: Message

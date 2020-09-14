@@ -7,17 +7,32 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
+    let router = Router(navigationController: UINavigationController())
+    private lazy var applicationCoordinator = self.makeCoordinator()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+         FirebaseApp.configure()
+         
+         window = UIWindow(frame: UIScreen.main.bounds)
+         let loginView = UIViewController()
+         loginView.view.backgroundColor = .red
+         window?.rootViewController = loginView//applicationCoordinator.router.toPresent()
+        // self.window = window
+         window?.makeKeyAndVisible()
         return true
     }
 
+    private func makeCoordinator() -> AppCoordinator {
+        return AppCoordinator(router: router)
+    }
+    
     // MARK: UISceneSession Lifecycle
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
