@@ -43,6 +43,13 @@
 		F78743C5250E6C27000101A2 /* FormTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78743C4250E6C27000101A2 /* FormTextViewDelegate.swift */; };
 		F78743C8250F368D000101A2 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78743C7250F368D000101A2 /* SignInViewController.swift */; };
 		F78743CA250F370A000101A2 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78743C9250F370A000101A2 /* SignInView.swift */; };
+		F79CC630250FEEE60081CFC9 /* CodeTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC62F250FEEE60081CFC9 /* CodeTextFieldView.swift */; };
+		F79CC632250FEF0E0081CFC9 /* CodeVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC631250FEF0E0081CFC9 /* CodeVerificationView.swift */; };
+		F79CC634250FEF330081CFC9 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC633250FEF330081CFC9 /* CodeView.swift */; };
+		F79CC636250FEF590081CFC9 /* CodeVerificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC635250FEF590081CFC9 /* CodeVerificationViewController.swift */; };
+		F79CC639250FEF9D0081CFC9 /* VerificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC638250FEF9D0081CFC9 /* VerificationCoordinator.swift */; };
+		F79CC63C250FF0280081CFC9 /* CountryPickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC63B250FF0280081CFC9 /* CountryPickerVC.swift */; };
+		F79CC63E250FF0830081CFC9 /* CircularSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC63D250FF0830081CFC9 /* CircularSpinner.swift */; };
 		F7BACD5E2508322600C9240E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BACD5D2508322600C9240E /* AppDelegate.swift */; };
 		F7BACD602508322600C9240E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BACD5F2508322600C9240E /* SceneDelegate.swift */; };
 		F7BACD622508322600C9240E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BACD612508322600C9240E /* ViewController.swift */; };
@@ -112,6 +119,13 @@
 		F78743C4250E6C27000101A2 /* FormTextViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextViewDelegate.swift; sourceTree = "<group>"; };
 		F78743C7250F368D000101A2 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		F78743C9250F370A000101A2 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		F79CC62F250FEEE60081CFC9 /* CodeTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeTextFieldView.swift; sourceTree = "<group>"; };
+		F79CC631250FEF0E0081CFC9 /* CodeVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVerificationView.swift; sourceTree = "<group>"; };
+		F79CC633250FEF330081CFC9 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
+		F79CC635250FEF590081CFC9 /* CodeVerificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeVerificationViewController.swift; sourceTree = "<group>"; };
+		F79CC638250FEF9D0081CFC9 /* VerificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationCoordinator.swift; sourceTree = "<group>"; };
+		F79CC63B250FF0280081CFC9 /* CountryPickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryPickerVC.swift; sourceTree = "<group>"; };
+		F79CC63D250FF0830081CFC9 /* CircularSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularSpinner.swift; sourceTree = "<group>"; };
 		F7BACD5A2508322600C9240E /* ChitChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChitChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7BACD5D2508322600C9240E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7BACD5F2508322600C9240E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -245,6 +259,7 @@
 		F7874394250ADACC000101A2 /* Login */ = {
 			isa = PBXGroup;
 			children = (
+				F79CC62D250FEE8C0081CFC9 /* Verification */,
 				F78743C6250F367C000101A2 /* SignIn */,
 				F78743A4250B4792000101A2 /* Coordinator */,
 				F78743A1250B420A000101A2 /* Views */,
@@ -295,6 +310,7 @@
 			isa = PBXGroup;
 			children = (
 				F78743A2250B4217000101A2 /* LoginButt.swift */,
+				F79CC63D250FF0830081CFC9 /* CircularSpinner.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -361,6 +377,43 @@
 				F78743C9250F370A000101A2 /* SignInView.swift */,
 			);
 			path = SignIn;
+			sourceTree = "<group>";
+		};
+		F79CC62D250FEE8C0081CFC9 /* Verification */ = {
+			isa = PBXGroup;
+			children = (
+				F79CC63A250FF00A0081CFC9 /* CountryPicker */,
+				F79CC637250FEF7B0081CFC9 /* Coordinators */,
+				F79CC62E250FEEB20081CFC9 /* CodeVerification */,
+			);
+			path = Verification;
+			sourceTree = "<group>";
+		};
+		F79CC62E250FEEB20081CFC9 /* CodeVerification */ = {
+			isa = PBXGroup;
+			children = (
+				F79CC62F250FEEE60081CFC9 /* CodeTextFieldView.swift */,
+				F79CC631250FEF0E0081CFC9 /* CodeVerificationView.swift */,
+				F79CC633250FEF330081CFC9 /* CodeView.swift */,
+				F79CC635250FEF590081CFC9 /* CodeVerificationViewController.swift */,
+			);
+			path = CodeVerification;
+			sourceTree = "<group>";
+		};
+		F79CC637250FEF7B0081CFC9 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				F79CC638250FEF9D0081CFC9 /* VerificationCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		F79CC63A250FF00A0081CFC9 /* CountryPicker */ = {
+			isa = PBXGroup;
+			children = (
+				F79CC63B250FF0280081CFC9 /* CountryPickerVC.swift */,
+			);
+			path = CountryPicker;
 			sourceTree = "<group>";
 		};
 		F7BACD512508322600C9240E = {
@@ -683,8 +736,11 @@
 				F7BACD8F2508329F00C9240E /* Users.swift in Sources */,
 				F7874397250ADCAD000101A2 /* FormTextView.swift in Sources */,
 				F78743AB250C1072000101A2 /* Color.swift in Sources */,
+				F79CC636250FEF590081CFC9 /* CodeVerificationViewController.swift in Sources */,
 				F7BACD622508322600C9240E /* ViewController.swift in Sources */,
 				F787439B250ADD4C000101A2 /* Colors.swift in Sources */,
+				F79CC634250FEF330081CFC9 /* CodeView.swift in Sources */,
+				F79CC632250FEF0E0081CFC9 /* CodeVerificationView.swift in Sources */,
 				F78743A6250B47A4000101A2 /* AuthCoordinator.swift in Sources */,
 				F78743B2250E58AB000101A2 /* KeyboardManager.swift in Sources */,
 				F7874385250AD94F000101A2 /* RouterType.swift in Sources */,
@@ -692,6 +748,7 @@
 				F78743A0250B3E61000101A2 /* SignUpView.swift in Sources */,
 				F78743A3250B4217000101A2 /* LoginButt.swift in Sources */,
 				F78743B6250E5916000101A2 /* NSNotification.swift in Sources */,
+				F79CC630250FEEE60081CFC9 /* CodeTextFieldView.swift in Sources */,
 				F787437E25085D27000101A2 /* ChatViewModel.swift in Sources */,
 				F78743BB250E5DF6000101A2 /* Refs.swift in Sources */,
 				F787439E250B3E15000101A2 /* SignUpViewController.swift in Sources */,
@@ -707,10 +764,13 @@
 				F787438C250AD9CC000101A2 /* CoordinatorFinishOutput.swift in Sources */,
 				F7BACD602508322600C9240E /* SceneDelegate.swift in Sources */,
 				F7874390250ADA48000101A2 /* BaseCoordinator.swift in Sources */,
+				F79CC63E250FF0830081CFC9 /* CircularSpinner.swift in Sources */,
 				F7874392250ADA70000101A2 /* AppCoordinator.swift in Sources */,
 				F78743C8250F368D000101A2 /* SignInViewController.swift in Sources */,
 				F7874388250AD985000101A2 /* Presentable.swift in Sources */,
+				F79CC63C250FF0280081CFC9 /* CountryPickerVC.swift in Sources */,
 				F78743BF250E61E8000101A2 /* ValidationType.swift in Sources */,
+				F79CC639250FEF9D0081CFC9 /* VerificationCoordinator.swift in Sources */,
 				F78743C5250E6C27000101A2 /* FormTextViewDelegate.swift in Sources */,
 				F787437A25085B6D000101A2 /* MessageKind.swift in Sources */,
 				F78743A8250B49C9000101A2 /* Authentication.swift in Sources */,
