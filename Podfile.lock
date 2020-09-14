@@ -79,6 +79,12 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - PhoneNumberKit (3.2.0):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.2.0)
+    - PhoneNumberKit/UIKit (= 3.2.0)
+  - PhoneNumberKit/PhoneNumberKitCore (3.2.0)
+  - PhoneNumberKit/UIKit (3.2.0):
+    - PhoneNumberKit/PhoneNumberKitCore
   - RocketData (8.0.0):
     - ConsistencyManager (~> 8.0.0)
   - SnapKit (5.0.1)
@@ -88,6 +94,7 @@ DEPENDENCIES:
   - FirebaseDatabase
   - FirebaseStorage
   - IGListKit (~> 4.0.0)
+  - PhoneNumberKit (from `https://github.com/TyFoskey/PhoneNumberKit.git`, branch `master`)
   - RocketData
   - SnapKit (~> 5.0.0)
 
@@ -115,6 +122,16 @@ SPEC REPOS:
     - RocketData
     - SnapKit
 
+EXTERNAL SOURCES:
+  PhoneNumberKit:
+    :branch: master
+    :git: https://github.com/TyFoskey/PhoneNumberKit.git
+
+CHECKOUT OPTIONS:
+  PhoneNumberKit:
+    :commit: 224033feb80331b94d397962789ac181e9325eac
+    :git: https://github.com/TyFoskey/PhoneNumberKit.git
+
 SPEC CHECKSUMS:
   ConsistencyManager: 72b8d918dfb257171fe45e994b45e3f38f6708fe
   Firebase: 458d109512200d1aca2e1b9b6cf7d68a869a4a46
@@ -135,9 +152,10 @@ SPEC CHECKSUMS:
   IGListKit: fd5a5d21935298f5849fa49d426843cff97b77c7
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  PhoneNumberKit: 68ab3f36afb0e9d848f6bde9a58f59d0e033c1f3
   RocketData: 33de68eddf0dd26f21e871cb2dc840244eb21968
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 7fe4c272aeb069bbfae15384b83470aa6ac97d7f
+PODFILE CHECKSUM: 0ef8d2e0fba516f886eefa48d121a2b55261297d
 
 COCOAPODS: 1.5.3

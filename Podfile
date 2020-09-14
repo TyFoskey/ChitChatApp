@@ -12,6 +12,7 @@ target 'ChitChat' do
   pod 'IGListKit', '~> 4.0.0'
   pod 'SnapKit', '~> 5.0.0'
   pod 'RocketData'
+  pod 'PhoneNumberKit', :git => 'https://github.com/TyFoskey/PhoneNumberKit.git', :branch => 'master'
 
   target 'ChitChatTests' do
     inherit! :search_paths
