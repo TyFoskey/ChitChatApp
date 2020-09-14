@@ -144,6 +144,7 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/ConsistencyManager/ConsistencyManager.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/FloatingPanel/FloatingPanel.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IGListDiffKit/IGListDiffKit.framework"
@@ -156,6 +157,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/ConsistencyManager/ConsistencyManager.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/FloatingPanel/FloatingPanel.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IGListDiffKit/IGListDiffKit.framework"

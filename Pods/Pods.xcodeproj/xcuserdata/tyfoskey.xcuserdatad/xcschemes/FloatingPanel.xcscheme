@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5A6D4EB4D723618F81EB5381EA42256C"
-               BlueprintName = "leveldb-library"
+               BlueprintIdentifier = "BAB9AB6EB252264FABBBA1BF7977858A"
+               BlueprintName = "FloatingPanel"
                ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "leveldb-library.framework">
+               BuildableName = "FloatingPanel.framework">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
