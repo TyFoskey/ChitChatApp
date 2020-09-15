@@ -1,5 +1,11 @@
 PODS:
+  - BSGridCollectionViewLayout (1.2.5)
+  - BSImagePicker (2.10.3):
+    - BSGridCollectionViewLayout (= 1.2.5)
+    - BSImageView (= 1.0.3)
+  - BSImageView (1.0.3)
   - ConsistencyManager (8.0.0)
+  - CropViewController (2.5.2)
   - Firebase/Analytics (6.13.0):
     - Firebase/Core
   - Firebase/Auth (6.13.0):
@@ -100,6 +106,8 @@ PODS:
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
+  - BSImagePicker
+  - CropViewController
   - Firebase/Analytics
   - Firebase/Auth
   - FirebaseDatabase
@@ -112,7 +120,11 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - BSGridCollectionViewLayout
+    - BSImagePicker
+    - BSImageView
     - ConsistencyManager
+    - CropViewController
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -147,7 +159,11 @@ CHECKOUT OPTIONS:
     :git: https://github.com/TyFoskey/PhoneNumberKit.git
 
 SPEC CHECKSUMS:
+  BSGridCollectionViewLayout: 333dcb457a5a3bdd9212607ab5756553dcfe06cb
+  BSImagePicker: 07404254f2fcdaf5a2eb403c0f8c337267ce8738
+  BSImageView: a149459433a2687157d034c78e059d30ac7f2544
   ConsistencyManager: 72b8d918dfb257171fe45e994b45e3f38f6708fe
+  CropViewController: 1aac40093c5739e60d992b04724a55d12a689a4c
   Firebase: 458d109512200d1aca2e1b9b6cf7d68a869a4a46
   FirebaseAnalytics: 45f36d9c429fc91d206283900ab75390cd05ee8a
   FirebaseAuth: 7d0f84873926f6648bbd1391a318dfb1a26b5e4f
@@ -172,6 +188,6 @@ SPEC CHECKSUMS:
   RocketData: 33de68eddf0dd26f21e871cb2dc840244eb21968
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 797e9f29820e5b7008e7fc9809f847e43265ee4b
+PODFILE CHECKSUM: 5f2027bc49b79b80d5ae593106c601783e75cc2c
 
 COCOAPODS: 1.5.3

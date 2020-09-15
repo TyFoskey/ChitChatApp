@@ -15,6 +15,8 @@ target 'ChitChat' do
   pod 'RocketData'
   pod 'PhoneNumberKit', :git => 'https://github.com/TyFoskey/PhoneNumberKit.git', :branch => 'master'
   pod 'FloatingPanel'
+  pod 'CropViewController'
+  pod 'BSImagePicker'
 
   target 'ChitChatTests' do
     inherit! :search_paths
