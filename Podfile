@@ -9,6 +9,7 @@ target 'ChitChat' do
   pod 'Firebase/Analytics'
   pod 'FirebaseDatabase'
   pod 'FirebaseStorage'
+  pod 'Firebase/Auth'
   pod 'IGListKit', '~> 4.0.0'
   pod 'SnapKit', '~> 5.0.0'
   pod 'RocketData'

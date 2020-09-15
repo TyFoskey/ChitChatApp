@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D9022AD98FCE12295D36B8ED0EF5542A"
+               BlueprintIdentifier = "2B9146116121A813756CCC40E4C9CC31"
                BlueprintName = "GoogleDataTransport"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "GoogleDataTransport.framework">
