@@ -10,7 +10,7 @@ import UIKit
 
 class LoginButt: UIButton {
     
-    let colorGradients = [Colors.primaryColor, Colors.secondaryColor]
+    let colorGradients = Constants.colors.colorGradients
     
     lazy var lineGradient: CAGradientLayer = {
         let gradient = CAGradientLayer()
@@ -43,7 +43,7 @@ class LoginButt: UIButton {
     func isValid() {
         addGradientBackground(colors: colorGradients, cornerRadius: 10, gradientType: .axial, startPoint: .init(x: 0, y: 1), endPoint: .init(x: 1, y: 0), locations: nil)
         layer.shadowOpacity = 0.2
-        layer.shadowColor = Colors.primaryColor.cgColor
+        layer.shadowColor = Constants.colors.primaryColor.cgColor
         layer.shadowOffset = CGSize(width: 4, height: 4)
         layer.shadowRadius = 3
         isEnabled = true

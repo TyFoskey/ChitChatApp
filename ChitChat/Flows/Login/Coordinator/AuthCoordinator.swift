@@ -27,7 +27,7 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     
     override func start() {
        // showSignIn(isStarting: true)
-        showVerification()
+        showProfilePicVC()
     }
     
     deinit {
@@ -97,6 +97,13 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
         }
         self.addChildCoordinator(verificationCoordinator)
         verificationCoordinator.start()
+    }
+    
+    private func showProfilePicVC() {
+        let profilePicVC = RegisterProfilePicViewController()
+        
+        //router.push(profilePicVC, hideBottomBar: true)
+        router.setRootModule(profilePicVC, hideBar: true)
     }
     
     

@@ -13,5 +13,5 @@ class Constants {
     static let validate = Validation()
     static let colors = Colors()
 //    static let gradients = Gradients()
-//    static var storageConfig = StorageConfig()
+    static var storageConfig = StorageConfig()
 }

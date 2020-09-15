@@ -62,7 +62,7 @@ class FormTextFieldView: UIView {
         topLabel.text = labelText
         topLabel.font = font ?? UIFont.systemFont(ofSize: 10, weight: .semibold)
         textField.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        topLabel.textColor = Colors.primaryColor
+        topLabel.textColor = Constants.colors.primaryColor
         
         errorLabel.textColor = .red
         errorLabel.font = UIFont.systemFont(ofSize: 10, weight: .medium)
@@ -180,7 +180,7 @@ extension FormTextFieldView: UITextFieldDelegate {
                        options: .curveEaseOut,
                        animations: { [weak self] in
                         guard let strongSelf = self else { return }
-                        strongSelf.bottomView.layer.addGradienBorder(colors: Colors.colorGradients, width: 2, cornerRadius: 8)
+                        strongSelf.bottomView.layer.addGradienBorder(colors: Constants.colors.colorGradients, width: 2, cornerRadius: 8)
                         strongSelf.bottomView.layer.borderColor = UIColor.clear.cgColor
                         strongSelf.layoutIfNeeded()
         }, completion: nil)

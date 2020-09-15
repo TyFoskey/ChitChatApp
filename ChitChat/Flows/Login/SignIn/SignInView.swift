@@ -22,7 +22,7 @@ class SignInView: UIView {
     let signUpLabel = UILabel()
     let signUpButtMaskView = UIView()
     let showPasswordButt = UIButton()
-    let colorGradients = [Colors.primaryColor, Colors.secondaryColor]
+    let colorGradients = Constants.colors.colorGradients
     weak var delegate: LoginViewDelegate?
     
     
@@ -65,14 +65,14 @@ class SignInView: UIView {
         titleLabel.text = "Welcome Back,"
         titleLabel.backgroundColor = .clear
         titleLabel.layer.shadowOpacity = 0.2
-        titleLabel.layer.shadowColor = Colors.primaryColor.cgColor
+        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
         titleLabel.layer.shadowRadius = 3
         titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
         titleLabel.textColor = .black//Colors.primaryColor
         subtitleLabel.text = "Sign in to continue!"
         subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        subtitleLabel.textColor = Colors.lightGray
+        subtitleLabel.textColor = Constants.colors.lightGray
         forgotPasswordButt.setTitle("Forgot Password?", for: .normal)
         forgotPasswordButt.setTitleColor(UIColor.black, for: .normal)
         forgotPasswordButt.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .medium)

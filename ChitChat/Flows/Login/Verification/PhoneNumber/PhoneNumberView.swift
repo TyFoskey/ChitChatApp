@@ -18,7 +18,7 @@ class PhoneNumberView: UIView {
     let subtitleLabel = UILabel()
     let nextButt = LoginButt()
     let numberForm = NumberFormTextField()
-    let colorGradients = [Colors.primaryColor, Colors.secondaryColor]
+    let colorGradients = Constants.colors.colorGradients
     weak var delegate: PhoneNumberViewDelegate?
     
     
@@ -51,14 +51,14 @@ class PhoneNumberView: UIView {
         titleLabel.text = "Sign Up,"
         titleLabel.backgroundColor = .clear
         titleLabel.layer.shadowOpacity = 0.2
-        titleLabel.layer.shadowColor = Colors.primaryColor.cgColor
+        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
         titleLabel.layer.shadowRadius = 3
         titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
         titleLabel.textColor = .black//Colors.primaryColor
         subtitleLabel.text = "Please enter your phone number"
         subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        subtitleLabel.textColor = Colors.lightGray
+        subtitleLabel.textColor = Constants.colors.lightGray
         nextButt.addTarget(self, action: #selector(loginButtTapped), for: .touchUpInside)
         numberForm.delegate = self
         addSubviews()

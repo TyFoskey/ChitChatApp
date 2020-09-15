@@ -9,14 +9,14 @@
 import Firebase
 
 class References {
-    static let ref = Database.database().reference()
-    static let userRef = Database.database().reference().child("User")
-    static var postRef = Database.database().reference().child("post")
-    static let notificationRef = Database.database().reference().child("notifications")
-    static let messagesRef = Database.database().reference().child("messages")
-    static let userMessagesRef = Database.database().reference().child("userMessages")
-    static let emailsRef = Database.database().reference().child("Emails")
-    static let phoneNumberRef = Database.database().reference().child("phoneNumbers")
-    static let pushNotificationsRef = Database.database().reference().child("pushNotifications")
+    let ref = Database.database().reference()
+    let userRef = Database.database().reference().child("User")
+    var postRef = Database.database().reference().child("post")
+    let notificationRef = Database.database().reference().child("notifications")
+    let messagesRef = Database.database().reference().child("messages")
+    let userMessagesRef = Database.database().reference().child("userMessages")
+    let emailsRef = Database.database().reference().child("Emails")
+    let phoneNumberRef = Database.database().reference().child("phoneNumbers")
+    let pushNotificationsRef = Database.database().reference().child("pushNotifications")
     
 }

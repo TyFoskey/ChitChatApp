@@ -19,7 +19,7 @@ class NumberFormTextField: UIView {
     let topLabel = UILabel()
     let blockView = UIView()
     var regionCode = PhoneNumberKit.defaultRegionCode()
-    let colorGradients = Colors.colorGradients
+    let colorGradients = Constants.colors.colorGradients
     weak var delegate: NumerFormTextViewDelegate?
     let errorImage = UIImage(named: "errorImageRed")
 
@@ -156,7 +156,7 @@ extension NumberFormTextField: UITextFieldDelegate {
                        options: .curveEaseOut,
                        animations: { [weak self] in
                         guard let strongSelf = self else { return }
-                        strongSelf.bottomView.layer.addGradienBorder(colors: Colors.colorGradients, width: 2, cornerRadius: 8)
+                        strongSelf.bottomView.layer.addGradienBorder(colors: Constants.colors.colorGradients, width: 2, cornerRadius: 8)
                         strongSelf.bottomView.layer.borderColor = UIColor.clear.cgColor
                         strongSelf.layoutIfNeeded()
             }, completion: nil)

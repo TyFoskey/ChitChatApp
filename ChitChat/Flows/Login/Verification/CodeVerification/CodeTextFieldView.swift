@@ -97,7 +97,7 @@ class CodeTextFieldView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        underlineView.addGradientBackground(colors: Colors.colorGradients, cornerRadius: 3, gradientType: .axial)
+        underlineView.addGradientBackground(colors: Constants.colors.colorGradients, cornerRadius: 3, gradientType: .axial)
        
     }
     
@@ -123,7 +123,7 @@ class CodeTextFieldView: UIView {
     
     func animateLineView() {
         let animation = CABasicAnimation(keyPath: "colors")
-        animation.fromValue = [Colors.primaryColor.cgColor, Colors.secondaryColor.cgColor]
+        animation.fromValue = [Constants.colors.primaryColor.cgColor, Constants.colors.secondaryColor.cgColor]
         animation.toValue = [UIColor.lightGray.cgColor, UIColor.lightGray.cgColor]
         animation.duration = 1.0
         animation.autoreverses = true
@@ -163,12 +163,12 @@ class CodeTextFieldView: UIView {
         }
         
         
-        shadowView.layer.shadowColor = Colors.secondaryColor.cgColor
+        shadowView.layer.shadowColor = Constants.colors.secondaryColor.cgColor
         shadowView.layer.shadowOffset = CGSize(width: 1, height: 2)
         shadowView.layer.shadowRadius = 4
         shadowView.layer.shadowOpacity = 0.2
         shadowView.layer.cornerRadius = 4
-        shadowView.backgroundColor = Colors.primaryColor
+        shadowView.backgroundColor = Constants.colors.primaryColor
         shadowView.snp.makeConstraints { (make) in
             make.edges.equalTo(underlineView)
         }
@@ -190,7 +190,7 @@ class CodeTextFieldView: UIView {
         gradient.frame = self.underlineView.bounds
         gradient.startPoint = CGPoint(x:0.0, y:0.5)
         gradient.endPoint = CGPoint(x:1.0, y:0.5)
-        gradient.colors = [Colors.primaryColor.cgColor, Colors.secondaryColor.cgColor]
+        gradient.colors = [Constants.colors.primaryColor.cgColor, Constants.colors.secondaryColor.cgColor]
         gradient.locations =  [-0.5, 1.5]
         
         let width: CGFloat = underlineView.bounds.width

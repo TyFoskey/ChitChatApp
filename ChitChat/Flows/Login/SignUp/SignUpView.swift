@@ -23,7 +23,7 @@ class SignUpView: UIView {
     let signInLabel = UILabel()
     let signInButtMaskView = UIView()
     let showPasswordButt = UIButton()
-    let colorGradients = [Colors.primaryColor, Colors.secondaryColor]
+    let colorGradients = Constants.colors.colorGradients
     weak var delegate: LoginViewDelegate?
 
 
@@ -66,14 +66,14 @@ class SignUpView: UIView {
         titleLabel.text = "Create Account,"
         titleLabel.backgroundColor = .clear
         titleLabel.layer.shadowOpacity = 0.2
-        titleLabel.layer.shadowColor = Colors.primaryColor.cgColor
+        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
         titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
         titleLabel.layer.shadowRadius = 3
         titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
         titleLabel.textColor = .black//Colors.primaryColor
         subtitleLabel.text = "Sign up to get started!"
         subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        subtitleLabel.textColor = Colors.lightGray
+        subtitleLabel.textColor = Constants.colors.lightGray
         alreadyUserLabel.text = "Already have an account?"
         alreadyUserLabel.textColor = .black
         alreadyUserLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
