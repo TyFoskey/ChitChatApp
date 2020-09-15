@@ -13,7 +13,7 @@ class SignInViewController: UIViewController {
     // MARK: - Properties
     let signInView = SignInView()
     let keyboardManager = KeyboardManager()
-    var onBottomButtTap: ((Any?) -> Void)?
+    var onBottomButtTap: ((Bool) -> Void)?
     var onSignUpButtTap: (() -> Void)?
     var isShowingPassword = false
     
@@ -107,6 +107,7 @@ extension SignInViewController: LoginViewDelegate {
             return
         }
         
+        onBottomButtTap?(true)
         print("login butt tapped")
     }
     

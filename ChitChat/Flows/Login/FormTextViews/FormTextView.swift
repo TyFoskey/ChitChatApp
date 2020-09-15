@@ -23,18 +23,8 @@ class FormTextFieldView: UIView {
     weak var delegate: FormTextViewDelegate?
     
     // MARK: - Variables
-    let colorGradients = [UIColor(red: 125/255, green: 137/255, blue: 225/255, alpha: 1).cgColor, UIColor(red: 137/255, green: 213/255, blue: 222/255, alpha: 1).cgColor]
     let errorImage = UIImage(named: "errorImageRed")
     let successImage = UIImage(named: "sendCheck")
-    
-    lazy var lineGradient: CAGradientLayer = {
-        let gradient = CAGradientLayer()
-        gradient.colors = colorGradients
-        gradient.type = .axial
-        gradient.startPoint = .init(x: 0, y: 1)
-        gradient.endPoint = .init(x: 1, y: 0)
-        return gradient
-    }()
     
     // MARK: - View Lifecycle
     init(labelText: String,placeholder: String, image: UIImage?, topLabelFont: UIFont? = nil, frame: CGRect, isPassword: Bool? = nil) {

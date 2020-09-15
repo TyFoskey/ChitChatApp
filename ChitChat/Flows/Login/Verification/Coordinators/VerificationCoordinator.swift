@@ -16,7 +16,7 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     private let router: Router
     private let phoneKit: PhoneNumberKit
     private var currentCountry = PhoneNumberKit()
-    private var signUpType: SignUpType!
+    var phoneNumber: String!
     
     // MARK: - Coordinator Finish Output
     var finishFlow: ((Any?) -> Void)?
@@ -28,7 +28,7 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     }
     
     func start() {
-        showSignUpwithVC()
+        showPhoneNumberVC()
     }
     
     deinit {
@@ -38,32 +38,24 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     // MARK: - Show VCs
     
     // Starts with asking for either their email or phone number
-    private func showSignUpwithVC() {
-        let signUpWithVC = SignUpWithViewController()
-        signUpWithVC.onButtomButtTap = { [weak self] text, type in
+    private func showPhoneNumberVC() {
+        let phoneNumberVC = PhoneNumberViewController()
+        phoneNumberVC.onButtomButtTap = { [weak self] text in
             guard let strongSelf = self else { return }
-            switch type {
-            case .email:
-                strongSelf.signUpType = .email(text)
-                strongSelf.finishFlow?(strongSelf.signUpType)
-            case .number:
-                strongSelf.signUpType = .phoneNumber(text)
-                strongSelf.showCodeVerificationVC(phoneNumber: text)
-            default: break
-            }
-            print("the text is \(text), and the type is \(type)")
-        }
-      
-        signUpWithVC.onCountryButtTap = {[weak self] in
-            print("country code tapped")
-            self?.showCountryPickerVC(signUpWithVC: signUpWithVC)
+            strongSelf.phoneNumber = text
+            strongSelf.showCodeVerificationVC(phoneNumber: text)
         }
         
-        router.push(signUpWithVC)
+        phoneNumberVC.onCountryButtTap = {[weak self] in
+            print("country code tapped")
+            self?.showCountryPickerVC(phoneNumberVC: phoneNumberVC)
+        }
+        
+        router.push(phoneNumberVC)
     }
     
     // Creates an country code picker VC
-    private func showCountryPickerVC(signUpWithVC: SignUpWithViewController) {
+    private func showCountryPickerVC(phoneNumberVC: PhoneNumberViewController) {
         let commomCountries = ["US", "CA", "MX", "AU", "GB", "DE"]
         let countryPickerVC = CountryCodePickerViewController(phoneNumberKit: phoneKit, commonCountryCodes: commomCountries, tableViewStyle: .insetGrouped)
         countryPickerVC.navigationItem.searchController?.hidesNavigationBarDuringPresentation = false
@@ -76,7 +68,7 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
         
         countryPickerVC.countryCodePickerViewControllerDidPickCountry = {[weak self] country in
             
-            signUpWithVC.updateRegionButton(region: country.code)
+            phoneNumberVC.updateRegionButton(region: country.code)
             self?.router.dismissModule()
             print(country.code)
         }
@@ -106,7 +98,7 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
                                                                 authentication: Authentication())
         codeVerificationVC.onVerifiedAction = {[weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.finishFlow?(strongSelf.signUpType)
+            strongSelf.finishFlow?(strongSelf.phoneNumber)
         }
         
         router.push(codeVerificationVC)

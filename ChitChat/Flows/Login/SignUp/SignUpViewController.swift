@@ -14,7 +14,7 @@ class SignUpViewController: UIViewController {
     // MARK: - Properties
     let signUpView = SignUpView()
     let keyboardManager = KeyboardManager()
-    var onBottomButtTap: ((Any?) -> Void)?
+    var onBottomButtTap: ((String, String) -> Void)?
     var onSignInButtTap: (() -> Void)?
     var isShowingPassword = false
     
@@ -121,7 +121,7 @@ extension SignUpViewController: LoginViewDelegate {
             strongSelf.validate(type: .password, text: passwordText) {
                 strongSelf.validate(type: .confirmPassword, text: conformPasswordText) {
                     print("next please")
-                    strongSelf.onBottomButtTap?(nil)
+                    strongSelf.onBottomButtTap?(nameText, passwordText)
                 }
             }
         }

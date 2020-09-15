@@ -10,6 +10,15 @@
 		2586CEF6425FF7113395C2E8 /* Pods_ChitChatTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC082CA2BFA6BF8EDED4942D /* Pods_ChitChatTests.framework */; };
 		3FDBE33B9A5CEEC875EF3C98 /* Pods_ChitChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526220B59BE1CF51C51B1414 /* Pods_ChitChat.framework */; };
 		41E38C5E6638C0A39642F356 /* Pods_ChitChatUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAC874DEFC43FD58A57A62C5 /* Pods_ChitChatUITests.framework */; };
+		F77003232510185E00C26DC3 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77003222510185E00C26DC3 /* PhoneNumberViewController.swift */; };
+		F7700325251018D400C26DC3 /* PhoneNumberView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7700324251018D400C26DC3 /* PhoneNumberView.swift */; };
+		F77003272510197900C26DC3 /* NumberFormTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77003262510197900C26DC3 /* NumberFormTextView.swift */; };
+		F770032925101F6500C26DC3 /* NumberFormTextViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770032825101F6500C26DC3 /* NumberFormTextViewDelegate.swift */; };
+		F770032B25106E7300C26DC3 /* PhoneNumberViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770032A25106E7200C26DC3 /* PhoneNumberViewDelegate.swift */; };
+		F770032D251076E800C26DC3 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770032C251076E800C26DC3 /* Result.swift */; };
+		F770032F2510780600C26DC3 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = F770032E2510780600C26DC3 /* Font.swift */; };
+		F77003312510782E00C26DC3 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77003302510782E00C26DC3 /* String.swift */; };
+		F77003332510789400C26DC3 /* ChangableFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77003322510789400C26DC3 /* ChangableFont.swift */; };
 		F7874374250835F1000101A2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7874373250835F1000101A2 /* Message.swift */; };
 		F787437725085A69000101A2 /* MessageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F787437625085A69000101A2 /* MessageViewModel.swift */; };
 		F787437A25085B6D000101A2 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = F787437925085B6D000101A2 /* MessageKind.swift */; };
@@ -86,6 +95,15 @@
 		ADB5C89B9C257DEF926E95D1 /* Pods-ChitChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChitChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChitChat/Pods-ChitChat.debug.xcconfig"; sourceTree = "<group>"; };
 		B33D4E01B6181F010FF03A72 /* Pods-ChitChatUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChitChatUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChitChatUITests/Pods-ChitChatUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		BAC874DEFC43FD58A57A62C5 /* Pods_ChitChatUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChitChatUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F77003222510185E00C26DC3 /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
+		F7700324251018D400C26DC3 /* PhoneNumberView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberView.swift; sourceTree = "<group>"; };
+		F77003262510197900C26DC3 /* NumberFormTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormTextView.swift; sourceTree = "<group>"; };
+		F770032825101F6500C26DC3 /* NumberFormTextViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormTextViewDelegate.swift; sourceTree = "<group>"; };
+		F770032A25106E7200C26DC3 /* PhoneNumberViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewDelegate.swift; sourceTree = "<group>"; };
+		F770032C251076E800C26DC3 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		F770032E2510780600C26DC3 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
+		F77003302510782E00C26DC3 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		F77003322510789400C26DC3 /* ChangableFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangableFont.swift; sourceTree = "<group>"; };
 		F7874373250835F1000101A2 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		F787437625085A69000101A2 /* MessageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewModel.swift; sourceTree = "<group>"; };
 		F787437925085B6D000101A2 /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
@@ -194,6 +212,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		F77003212510184B00C26DC3 /* PhoneNumber */ = {
+			isa = PBXGroup;
+			children = (
+				F77003222510185E00C26DC3 /* PhoneNumberViewController.swift */,
+				F7700324251018D400C26DC3 /* PhoneNumberView.swift */,
+			);
+			path = PhoneNumber;
+			sourceTree = "<group>";
+		};
 		F787437525085A4C000101A2 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +235,7 @@
 			children = (
 				F787437925085B6D000101A2 /* MessageKind.swift */,
 				F78743BE250E61E8000101A2 /* ValidationType.swift */,
+				F770032C251076E800C26DC3 /* Result.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -226,6 +254,7 @@
 			children = (
 				F78743C1250E6368000101A2 /* Login */,
 				F78743C0250E6354000101A2 /* Coordinator */,
+				F77003322510789400C26DC3 /* ChangableFont.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -274,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				F7874396250ADCAD000101A2 /* FormTextView.swift */,
+				F77003262510197900C26DC3 /* NumberFormTextView.swift */,
 			);
 			path = FormTextViews;
 			sourceTree = "<group>";
@@ -329,6 +359,8 @@
 				F78743AA250C1072000101A2 /* Color.swift */,
 				F78743AC250C279F000101A2 /* Gradients.swift */,
 				F78743B5250E5916000101A2 /* NSNotification.swift */,
+				F770032E2510780600C26DC3 /* Font.swift */,
+				F77003302510782E00C26DC3 /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -365,7 +397,9 @@
 			isa = PBXGroup;
 			children = (
 				F78743C2250E6388000101A2 /* LoginViewDelegate.swift */,
+				F770032A25106E7200C26DC3 /* PhoneNumberViewDelegate.swift */,
 				F78743C4250E6C27000101A2 /* FormTextViewDelegate.swift */,
+				F770032825101F6500C26DC3 /* NumberFormTextViewDelegate.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -382,6 +416,7 @@
 		F79CC62D250FEE8C0081CFC9 /* Verification */ = {
 			isa = PBXGroup;
 			children = (
+				F77003212510184B00C26DC3 /* PhoneNumber */,
 				F79CC63A250FF00A0081CFC9 /* CountryPicker */,
 				F79CC637250FEF7B0081CFC9 /* Coordinators */,
 				F79CC62E250FEEB20081CFC9 /* CodeVerification */,
@@ -744,24 +779,30 @@
 				F79CC634250FEF330081CFC9 /* CodeView.swift in Sources */,
 				F79CC632250FEF0E0081CFC9 /* CodeVerificationView.swift in Sources */,
 				F78743A6250B47A4000101A2 /* AuthCoordinator.swift in Sources */,
+				F77003332510789400C26DC3 /* ChangableFont.swift in Sources */,
 				F78743B2250E58AB000101A2 /* KeyboardManager.swift in Sources */,
 				F7874385250AD94F000101A2 /* RouterType.swift in Sources */,
+				F77003232510185E00C26DC3 /* PhoneNumberViewController.swift in Sources */,
 				F78743BD250E5E28000101A2 /* Constants.swift in Sources */,
 				F78743A0250B3E61000101A2 /* SignUpView.swift in Sources */,
 				F78743A3250B4217000101A2 /* LoginButt.swift in Sources */,
 				F78743B6250E5916000101A2 /* NSNotification.swift in Sources */,
+				F770032B25106E7300C26DC3 /* PhoneNumberViewDelegate.swift in Sources */,
 				F79CC630250FEEE60081CFC9 /* CodeTextFieldView.swift in Sources */,
 				F787437E25085D27000101A2 /* ChatViewModel.swift in Sources */,
 				F78743BB250E5DF6000101A2 /* Refs.swift in Sources */,
 				F787439E250B3E15000101A2 /* SignUpViewController.swift in Sources */,
 				F78743B9250E5DA3000101A2 /* Validation.swift in Sources */,
+				F770032925101F6500C26DC3 /* NumberFormTextViewDelegate.swift in Sources */,
 				F78743C3250E6388000101A2 /* LoginViewDelegate.swift in Sources */,
 				F78743CA250F370A000101A2 /* SignInView.swift in Sources */,
 				F78743AD250C279F000101A2 /* Gradients.swift in Sources */,
 				F7874374250835F1000101A2 /* Message.swift in Sources */,
 				F7874383250AD920000101A2 /* Router.swift in Sources */,
 				F7BACD5E2508322600C9240E /* AppDelegate.swift in Sources */,
+				F77003272510197900C26DC3 /* NumberFormTextView.swift in Sources */,
 				F787437725085A69000101A2 /* MessageViewModel.swift in Sources */,
+				F770032F2510780600C26DC3 /* Font.swift in Sources */,
 				F787438A250AD99C000101A2 /* Coordinator.swift in Sources */,
 				F787438C250AD9CC000101A2 /* CoordinatorFinishOutput.swift in Sources */,
 				F7BACD602508322600C9240E /* SceneDelegate.swift in Sources */,
@@ -769,12 +810,15 @@
 				F79CC63E250FF0830081CFC9 /* CircularSpinner.swift in Sources */,
 				F7874392250ADA70000101A2 /* AppCoordinator.swift in Sources */,
 				F78743C8250F368D000101A2 /* SignInViewController.swift in Sources */,
+				F7700325251018D400C26DC3 /* PhoneNumberView.swift in Sources */,
 				F7874388250AD985000101A2 /* Presentable.swift in Sources */,
 				F79CC63C250FF0280081CFC9 /* CountryPickerVC.swift in Sources */,
 				F78743BF250E61E8000101A2 /* ValidationType.swift in Sources */,
 				F79CC639250FEF9D0081CFC9 /* VerificationCoordinator.swift in Sources */,
 				F78743C5250E6C27000101A2 /* FormTextViewDelegate.swift in Sources */,
 				F787437A25085B6D000101A2 /* MessageKind.swift in Sources */,
+				F770032D251076E800C26DC3 /* Result.swift in Sources */,
+				F77003312510782E00C26DC3 /* String.swift in Sources */,
 				F78743A8250B49C9000101A2 /* Authentication.swift in Sources */,
 				F78743B0250E5875000101A2 /* KeyboardEvent.swift in Sources */,
 			);

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PhoneNumberKit
 
 final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     
@@ -25,7 +26,8 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     }
     
     override func start() {
-        showSignIn(isStarting: true)
+       // showSignIn(isStarting: true)
+        showVerification()
     }
     
     deinit {
@@ -36,7 +38,7 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     // MARK: - Show VCs
     private func showSignIn(isStarting: Bool) {
         let signInVC = SignInViewController()
-        signInVC.onBottomButtTap = { (object) in
+        signInVC.onBottomButtTap = { (isValid) in
             
         }
         
@@ -66,6 +68,11 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
             router.push(signUpVC, animated: true)
         }
         
+        signUpVC.onBottomButtTap = {[weak self] (name, password) in
+            guard let strongSelf = self else { return }
+            strongSelf.showVerification()
+        }
+        
     }
     
     private func showOtherVC(isStarting: Bool, isSignIn: Bool) {
@@ -76,6 +83,20 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
         } else {
             router.popModule()
         }
+    }
+    
+    // Verifies the user and returns either an email or phone number
+    private func showVerification() {
+        let phoneKit = PhoneNumberKit()
+        let verificationCoordinator = VerificationCoordinator(router: router, phoneKit: phoneKit)
+        
+        verificationCoordinator.finishFlow = { [weak self] (number) in
+          //  guard let strongSelf = self else { return }
+           // strongSelf.removeChildCoordinator(verificationCoordinator)
+            print("your verified")
+        }
+        self.addChildCoordinator(verificationCoordinator)
+        verificationCoordinator.start()
     }
     
     
