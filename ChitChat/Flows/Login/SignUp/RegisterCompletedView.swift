@@ -67,7 +67,7 @@ class RegisterCompletedView: UIView {
         }
         
         
-        imageView.image = UIImage(named: "sendCheck")
+        imageView.image = UIImage(named: "sendCheckBig")
         imageView.layer.cornerRadius = 250 / 2
         imageView.contentMode = .scaleAspectFill
         imageView.snp.makeConstraints { (make) in
