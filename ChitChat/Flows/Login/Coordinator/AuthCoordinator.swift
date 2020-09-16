@@ -26,8 +26,7 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     }
     
     override func start() {
-       // showSignIn(isStarting: true)
-        showProfilePicVC()
+        showSignIn(isStarting: true)
     }
     
     deinit {
@@ -91,8 +90,9 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
         let verificationCoordinator = VerificationCoordinator(router: router, phoneKit: phoneKit)
         
         verificationCoordinator.finishFlow = { [weak self] (number) in
-          //  guard let strongSelf = self else { return }
-           // strongSelf.removeChildCoordinator(verificationCoordinator)
+            guard let strongSelf = self else { return }
+            strongSelf.removeChildCoordinator(verificationCoordinator)
+            strongSelf.showProfilePicVC()
             print("your verified")
         }
         self.addChildCoordinator(verificationCoordinator)
@@ -102,9 +102,17 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     private func showProfilePicVC() {
         let profilePicVC = RegisterProfilePicViewController()
         
-        //router.push(profilePicVC, hideBottomBar: true)
-        router.setRootModule(profilePicVC, hideBar: true)
+        profilePicVC.onBottomButtTap = {[weak self] (image) in
+            guard let strongSelf = self else { return }
+            strongSelf.showCompletedVC()
+        }
+        
+        router.push(profilePicVC, hideBottomBar: true)
     }
     
+    private func showCompletedVC() {
+        let congratsVC = RegisterCompletedViewController()
+        router.push(congratsVC, hideBottomBar: true)
+    }
     
 }

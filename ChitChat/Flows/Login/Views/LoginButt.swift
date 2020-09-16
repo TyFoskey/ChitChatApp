@@ -32,7 +32,7 @@ class LoginButt: UIButton {
     }
     
     private func setUp() {
-        setTitle("Login", for: .normal)
+        setTitle("Next", for: .normal)
         setTitleColor(.white, for: .normal)
         backgroundColor = .lightGray
         layer.cornerRadius = 10

@@ -63,6 +63,12 @@
 		F79CC639250FEF9D0081CFC9 /* VerificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC638250FEF9D0081CFC9 /* VerificationCoordinator.swift */; };
 		F79CC63C250FF0280081CFC9 /* CountryPickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC63B250FF0280081CFC9 /* CountryPickerVC.swift */; };
 		F79CC63E250FF0830081CFC9 /* CircularSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79CC63D250FF0830081CFC9 /* CircularSpinner.swift */; };
+		F7ACBC5E25111D2D004EF90F /* ChitChatImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ACBC5D25111D2D004EF90F /* ChitChatImagePicker.swift */; };
+		F7ACBC6125114608004EF90F /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ACBC6025114608004EF90F /* AssetManager.swift */; };
+		F7ACBC6325114767004EF90F /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ACBC6225114767004EF90F /* UIImage.swift */; };
+		F7ACBC6525114A9F004EF90F /* PHCatchingImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ACBC6425114A9F004EF90F /* PHCatchingImageManager.swift */; };
+		F7ACBC672511CFEF004EF90F /* RegisterCompletedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ACBC662511CFEF004EF90F /* RegisterCompletedViewController.swift */; };
+		F7ACBC692511D008004EF90F /* RegisterCompletedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7ACBC682511D008004EF90F /* RegisterCompletedView.swift */; };
 		F7BACD5E2508322600C9240E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BACD5D2508322600C9240E /* AppDelegate.swift */; };
 		F7BACD602508322600C9240E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BACD5F2508322600C9240E /* SceneDelegate.swift */; };
 		F7BACD622508322600C9240E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7BACD612508322600C9240E /* ViewController.swift */; };
@@ -152,6 +158,12 @@
 		F79CC638250FEF9D0081CFC9 /* VerificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationCoordinator.swift; sourceTree = "<group>"; };
 		F79CC63B250FF0280081CFC9 /* CountryPickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryPickerVC.swift; sourceTree = "<group>"; };
 		F79CC63D250FF0830081CFC9 /* CircularSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularSpinner.swift; sourceTree = "<group>"; };
+		F7ACBC5D25111D2D004EF90F /* ChitChatImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChitChatImagePicker.swift; sourceTree = "<group>"; };
+		F7ACBC6025114608004EF90F /* AssetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
+		F7ACBC6225114767004EF90F /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
+		F7ACBC6425114A9F004EF90F /* PHCatchingImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHCatchingImageManager.swift; sourceTree = "<group>"; };
+		F7ACBC662511CFEF004EF90F /* RegisterCompletedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCompletedViewController.swift; sourceTree = "<group>"; };
+		F7ACBC682511D008004EF90F /* RegisterCompletedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCompletedView.swift; sourceTree = "<group>"; };
 		F7BACD5A2508322600C9240E /* ChitChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChitChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7BACD5D2508322600C9240E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7BACD5F2508322600C9240E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -351,6 +363,8 @@
 				F787439F250B3E61000101A2 /* SignUpView.swift */,
 				F73C2C23251103DD001D28C6 /* RegisterProfilePicViewController.swift */,
 				F73C2C2525110404001D28C6 /* RegisterProfilePicView.swift */,
+				F7ACBC662511CFEF004EF90F /* RegisterCompletedViewController.swift */,
+				F7ACBC682511D008004EF90F /* RegisterCompletedView.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -380,6 +394,8 @@
 				F78743B5250E5916000101A2 /* NSNotification.swift */,
 				F770032E2510780600C26DC3 /* Font.swift */,
 				F77003302510782E00C26DC3 /* String.swift */,
+				F7ACBC6225114767004EF90F /* UIImage.swift */,
+				F7ACBC6425114A9F004EF90F /* PHCatchingImageManager.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -471,6 +487,23 @@
 			path = CountryPicker;
 			sourceTree = "<group>";
 		};
+		F7ACBC5C25111D1D004EF90F /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				F7ACBC5F251145F9004EF90F /* AssetManager */,
+				F7ACBC5D25111D2D004EF90F /* ChitChatImagePicker.swift */,
+			);
+			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		F7ACBC5F251145F9004EF90F /* AssetManager */ = {
+			isa = PBXGroup;
+			children = (
+				F7ACBC6025114608004EF90F /* AssetManager.swift */,
+			);
+			path = AssetManager;
+			sourceTree = "<group>";
+		};
 		F7BACD512508322600C9240E = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +529,7 @@
 		F7BACD5C2508322600C9240E /* ChitChat */ = {
 			isa = PBXGroup;
 			children = (
+				F7ACBC5C25111D1D004EF90F /* ImagePicker */,
 				F78743AE250E585D000101A2 /* KeyboardManager */,
 				F78743A9250C1047000101A2 /* Extensions */,
 				F7874398250ADD3C000101A2 /* Constants */,
@@ -816,15 +850,19 @@
 				F78743B6250E5916000101A2 /* NSNotification.swift in Sources */,
 				F770032B25106E7300C26DC3 /* PhoneNumberViewDelegate.swift in Sources */,
 				F79CC630250FEEE60081CFC9 /* CodeTextFieldView.swift in Sources */,
+				F7ACBC672511CFEF004EF90F /* RegisterCompletedViewController.swift in Sources */,
 				F787437E25085D27000101A2 /* ChatViewModel.swift in Sources */,
 				F78743BB250E5DF6000101A2 /* Refs.swift in Sources */,
 				F787439E250B3E15000101A2 /* SignUpViewController.swift in Sources */,
+				F7ACBC6325114767004EF90F /* UIImage.swift in Sources */,
 				F78743B9250E5DA3000101A2 /* Validation.swift in Sources */,
 				F770032925101F6500C26DC3 /* NumberFormTextViewDelegate.swift in Sources */,
 				F78743C3250E6388000101A2 /* LoginViewDelegate.swift in Sources */,
 				F78743CA250F370A000101A2 /* SignInView.swift in Sources */,
+				F7ACBC5E25111D2D004EF90F /* ChitChatImagePicker.swift in Sources */,
 				F78743AD250C279F000101A2 /* Gradients.swift in Sources */,
 				F7874374250835F1000101A2 /* Message.swift in Sources */,
+				F7ACBC6525114A9F004EF90F /* PHCatchingImageManager.swift in Sources */,
 				F7874383250AD920000101A2 /* Router.swift in Sources */,
 				F7BACD5E2508322600C9240E /* AppDelegate.swift in Sources */,
 				F77003272510197900C26DC3 /* NumberFormTextView.swift in Sources */,
@@ -840,7 +878,9 @@
 				F7700325251018D400C26DC3 /* PhoneNumberView.swift in Sources */,
 				F7874388250AD985000101A2 /* Presentable.swift in Sources */,
 				F79CC63C250FF0280081CFC9 /* CountryPickerVC.swift in Sources */,
+				F7ACBC6125114608004EF90F /* AssetManager.swift in Sources */,
 				F73C2C2225108E11001D28C6 /* StorageConfig.swift in Sources */,
+				F7ACBC692511D008004EF90F /* RegisterCompletedView.swift in Sources */,
 				F78743BF250E61E8000101A2 /* ValidationType.swift in Sources */,
 				F79CC639250FEF9D0081CFC9 /* VerificationCoordinator.swift in Sources */,
 				F78743C5250E6C27000101A2 /* FormTextViewDelegate.swift in Sources */,

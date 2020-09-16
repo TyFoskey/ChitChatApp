@@ -101,19 +101,16 @@ extension PhoneNumberViewController: PhoneNumberViewDelegate {
     }
     
     func codeButtTapped() {
-        print("view controller tapped")
         onCountryButtTap?()
     }
     
     func textFieldDidChange() {
         if phoneNumberView.numberForm.phoneTextField.text?.isEmpty == false {
                if phoneNumberView.nextButt.isEnabled == false {
-                   print("making it valid")
                    phoneNumberView.nextButt.isValid()
                }
            } else {
                if phoneNumberView.nextButt.isEnabled == true {
-                   print("making it invalid")
                    phoneNumberView.nextButt.isNotValid()
                }
            }
