@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 final class AppCoordinator: BaseCoordinator {
     
@@ -17,7 +18,17 @@ final class AppCoordinator: BaseCoordinator {
     }
     
     override func start() {
-        runAuthFlow()
+        if Auth.auth().currentUser != nil {
+            runMainFlow()
+        } else {
+            runAuthFlow()
+        }
+    }
+    
+    private func runMainFlow() {
+        let mainCoordinator = MainCoordinator(router: router)
+        addChildCoordinator(mainCoordinator)
+        mainCoordinator.start()
     }
     
     private func runAuthFlow() {

@@ -26,7 +26,7 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
     weak var inputAccessoryView: UIView?
     
     /// A flag that indicates if a portion of the keyboard is visible on the screen
-    private(set) var isKeyboardHidden = true
+    var isKeyboardHidden = true
     
   //  var constraints: Constraints
     
@@ -49,6 +49,8 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
     /// A bool indicating whether or not the keyboard is  currently being dragged by the user
     private var dragging = false
     
+    var isDismissing = false
+    
     
     // MARK: - Init
     
@@ -57,7 +59,7 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
     /// - Parameter inputAccessoryView: The view to bind to the top of the keyboard but within its superview
     convenience init(inputAccessoryView: UIView) {
         self.init()
-        self.bind(inputAccessoryView: inputAccessoryView)
+        self.bind(inputAccessoryView: inputAccessoryView, with: 60)
     }
     
         
@@ -133,7 +135,7 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
     /// - Returns: Self
     
     @discardableResult
-    func bind(inputAccessoryView: UIView) -> Self {
+    func bind(inputAccessoryView: UIView, with height: CGFloat) -> Self {
         
         guard let superview = inputAccessoryView.superview else {
             fatalError("`inputAccessoryView` must have a superview")
@@ -141,38 +143,45 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
         
         self.inputAccessoryView = inputAccessoryView
         self.inputAccessoryView?.snp.makeConstraints { (make) in
-            make.left.right.bottom.equalTo(superview)
+           // make.left.right.equalTo(superview)
+           // make.bottom.equalTo(superview)
         }
         
         let reconizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGestureRecognizer(recognizer:)))
         reconizer.delegate = self
-        
+    
         callbacks[.willShow] = {[weak self] (notification) in
             let keyboardHeight = notification.endFrame.height
             
             self?.animateAlongside(notification) {
                 self?.inputAccessoryView?.snp.updateConstraints({ (make) in
-                    make.bottom.equalTo(superview).offset(-keyboardHeight)
+                    make.bottom.equalTo(superview).offset(-keyboardHeight - 80)
                 })
                 self?.inputAccessoryView?.superview?.layoutIfNeeded()
             }
         }
         
         callbacks[.willChangeFrame] = {[weak self] (notificaiton) in
+            print("will change")
+            guard let strongSelf = self,
+                strongSelf.isKeyboardHidden == false else {
+                return
+            }
+            print(strongSelf.isKeyboardHidden)
             let keyboardHeight = notificaiton.endFrame.height
-            guard self?.isKeyboardHidden == false else { return }
-            self?.animateAlongside(notificaiton) {
-                self?.inputAccessoryView?.snp.updateConstraints({ (make) in
-                    make.bottom.equalTo(superview).offset(-keyboardHeight)
+            strongSelf.animateAlongside(notificaiton) {
+                strongSelf.inputAccessoryView?.snp.updateConstraints({ (make) in
+                    let height = strongSelf.isDismissing == false ? -keyboardHeight + height : 0
+                    make.bottom.equalTo(superview).offset(height)
                 })
-                self?.inputAccessoryView?.superview?.layoutIfNeeded()
+                strongSelf.inputAccessoryView?.superview?.layoutIfNeeded()
             }
         }
         
         callbacks[.willHide] = {[weak self] (notificaiton) in
             self?.animateAlongside(notificaiton) {
                 self?.inputAccessoryView?.snp.updateConstraints({ (make) in
-                    make.bottom.equalTo(0)
+                    make.bottom.equalTo(superview).offset(0)
                 })
                 self?.inputAccessoryView?.superview?.layoutIfNeeded()
             }
@@ -246,9 +255,10 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
     /// - Parameter notification: NSNotification
     @objc
     func keyboardWillShow(notification: NSNotification) {
-        isKeyboardHidden = false
         guard let keyboardNotification = KeyboardNotification(from: notification) else { return }
         callbacks[.willShow]?(keyboardNotification)
+        isKeyboardHidden = false
+
     }
     
     /// An observer method called second in the lifecycle of a keyboard becoming hidden
@@ -280,11 +290,12 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
         guard
             var keyboardNotification = cachedNotification,
             let view = recognizer.view,
-            let window = UIApplication.shared.windows.first
+            let window = UIApplication.shared.windows.first,
+            let superView = view.superview
         else { return }
         
         let location = recognizer.location(in: view)
-        let absoluteLocation = view.convert(location, to: view)
+        let absoluteLocation = superView.convert(location, to: view)
         
         switch recognizer.state {
             
@@ -292,6 +303,8 @@ class KeyboardManager: NSObject, UIGestureRecognizerDelegate {
             dragging = false
             
         case .changed:
+            print(absoluteLocation, "absolute location", inputAccessoryView?.frame, "input frame")
+            
             if inputAccessoryView!.frame.contains(absoluteLocation) || dragging == true {
                 dragging = true
                 var frame = keyboardNotification.endFrame

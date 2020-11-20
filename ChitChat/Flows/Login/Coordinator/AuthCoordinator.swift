@@ -14,10 +14,12 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     // MARK: - Properties
     let router: Router
     let auth: Authentication
+    var name: String!
+    var imageData: Data!
+    var verificationObject: VerificationObject!
     
     // MARK: - Coordinator Finish Output
     var finishFlow: ((Any?) -> Void)?
-    
     
     // MARK: - Coordinator Lifecycle
     init(router: Router, auth: Authentication) {
@@ -36,9 +38,10 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     
     // MARK: - Show VCs
     private func showSignIn(isStarting: Bool) {
-        let signInVC = SignInViewController()
-        signInVC.onBottomButtTap = { (isValid) in
-            
+        let signInVC = SignInViewController(auth: auth)
+        signInVC.onBottomButtTap = { [weak self] (verificationId) in
+            guard let strongSelf = self else { return }
+            strongSelf.showVerification()
         }
         
         signInVC.onSignUpButtTap = {[weak self] in
@@ -67,9 +70,10 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
             router.push(signUpVC, animated: true)
         }
         
-        signUpVC.onBottomButtTap = {[weak self] (name, password) in
+        signUpVC.onBottomButtTap = {[weak self] (name) in
             guard let strongSelf = self else { return }
-            strongSelf.showVerification()
+            strongSelf.name = name
+            strongSelf.showProfilePicVC()
         }
         
     }
@@ -87,12 +91,15 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     // Verifies the user and returns either an email or phone number
     private func showVerification() {
         let phoneKit = PhoneNumberKit()
-        let verificationCoordinator = VerificationCoordinator(router: router, phoneKit: phoneKit)
+        let verificationCoordinator = VerificationCoordinator(router: router, phoneKit: phoneKit, auth: auth, name: name, imageData: imageData)
         
-        verificationCoordinator.finishFlow = { [weak self] (number) in
-            guard let strongSelf = self else { return }
+        verificationCoordinator.finishFlow = { [weak self] (verificationObject) in
+            guard let verificationObject = verificationObject as? VerificationObject,
+                    let strongSelf = self else { return }
+            
+            strongSelf.verificationObject = verificationObject
             strongSelf.removeChildCoordinator(verificationCoordinator)
-            strongSelf.showProfilePicVC()
+            strongSelf.goToMainVC()
             print("your verified")
         }
         self.addChildCoordinator(verificationCoordinator)
@@ -103,16 +110,20 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
         let profilePicVC = RegisterProfilePicViewController()
         
         profilePicVC.onBottomButtTap = {[weak self] (image) in
-            guard let strongSelf = self else { return }
-            strongSelf.showCompletedVC()
+            guard let strongSelf = self,
+                  let imageData = image.jpegData(compressionQuality: 0.5) else { return }
+            strongSelf.imageData = imageData
+            strongSelf.showVerification()
         }
         
         router.push(profilePicVC, hideBottomBar: true)
     }
     
-    private func showCompletedVC() {
-        let congratsVC = RegisterCompletedViewController()
-        router.push(congratsVC, hideBottomBar: true)
-    }
     
+    private func goToMainVC() {
+        let mainCoordinator = MainCoordinator(router: router)
+        
+        self.addChildCoordinator(mainCoordinator)
+        mainCoordinator.start()
+    }
 }

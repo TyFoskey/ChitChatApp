@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Message {
+class Message: SnapshotProtocol {
     
     var messageText: String?
     var fromId: String
@@ -49,4 +49,23 @@ class Message {
           self.imageHeight = snapDict["imageHeight"] as? NSNumber
       }
     
+}
+
+// MARK: - Equatable
+extension Message: Equatable {
+    static func == (lhs: Message, rhs: Message) -> Bool {
+        return lhs.messageText == rhs.messageText &&
+            lhs.creationDate == rhs.creationDate &&
+            lhs.toId == rhs.toId &&
+            lhs.fromId == rhs.fromId &&
+            lhs.type == rhs.type &&
+            lhs.id == rhs.id &&
+            lhs.photoUrl == rhs.photoUrl &&
+            lhs.imageWidth == rhs.imageWidth &&
+            lhs.imageHeight == rhs.imageHeight &&
+            lhs.localImage == rhs.localImage &&
+            lhs.users == rhs.users &&
+            lhs.isRead == rhs.isRead
+        
+    }
 }

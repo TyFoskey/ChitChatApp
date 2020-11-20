@@ -16,8 +16,9 @@ class CodeVerificationViewController: UIViewController {
     let phoneNumber: String
     let authentication: Authentication
     var vericationCode: String! = "123456"
+    var verificationId: String!
     let keyboardManager = KeyboardManager()
-    var onVerifiedAction: (() -> Void)?
+    var onVerifiedAction: ((VerificationObject) -> Void)?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -31,7 +32,7 @@ class CodeVerificationViewController: UIViewController {
             make.left.right.equalTo(view)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin)
         }
-       // sendAuthenticationCode()
+        sendAuthenticationCode()
     }
     
     init(phoneNumber: String,
@@ -54,13 +55,14 @@ class CodeVerificationViewController: UIViewController {
     
     // MARK: - Private functions
     private func sendAuthenticationCode() {
-        authentication.verifyPhone(phoneNumber: phoneNumber) { [weak self] (result) in
+        authentication.sendPhoneCode(phoneNumber: phoneNumber) { [weak self] (result) in
             guard let strongSelf = self else { return }
             switch result {
             case .error(let errorMessage):
                 print(errorMessage)
-            case .success(let verificationCode):
-                strongSelf.vericationCode = verificationCode
+            case .success(let verificationId):
+                strongSelf.verificationId = verificationId
+                print("got verificationId")
                 
             default:
                 break
@@ -105,15 +107,17 @@ extension CodeVerificationViewController: CodeViewDelegate {
             verifyView.errorLabel.isHidden = true
         }
         verifyView.updateBottomButt(isEnabled: verifyView.codeView.hasValidCode()
-                                    && vericationCode != nil)
+                                    && verificationId != nil)
     }
     
     func verifyNumber(code: String) {
-        if code == vericationCode {
-            onVerifiedAction?()
-        } else {
-            verifyView.setWrongValue()
-        }
+        let verificationObject = VerificationObject(number: phoneNumber, code: code, id: verificationId)
+        onVerifiedAction?(verificationObject)
+//        if code == vericationCode {
+//            onVerifiedAction?()
+//        } else {
+//            verifyView.setWrongValue()
+//        }
     }
     
 }

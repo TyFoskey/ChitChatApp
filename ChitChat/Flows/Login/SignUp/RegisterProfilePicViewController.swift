@@ -18,9 +18,9 @@ class RegisterProfilePicViewController: UIViewController {
     var onBottomButtTap: ((UIImage) -> Void)?
     var onChangeProfilePicTap: (() -> Void)?
     var isImageLoaded = false
+   
     
     // MARK: - View Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setView()
@@ -30,6 +30,7 @@ class RegisterProfilePicViewController: UIViewController {
     // MARK: - Set View
     
     private func setView() {
+        self.navigationItem.setHidesBackButton(true, animated: true)
         view.backgroundColor = .white
         view.addSubview(registerProfileView)
         registerProfileView.snp.makeConstraints { (make) in
@@ -41,14 +42,14 @@ class RegisterProfilePicViewController: UIViewController {
     }
     
     // MARK: - Init
-    
     init() {
-        super.init(nibName: nil, bundle: nil)
-    }
+           super.init(nibName: nil, bundle: nil)
+       }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
 }
 

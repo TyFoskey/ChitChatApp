@@ -16,12 +16,10 @@ class SignInView: UIView {
     let subtitleLabel = UILabel()
     let loginButt = LoginButt()
     let numberForm = FormTextFieldView(labelText: "PHONE NUMBER", placeholder: "Phone Number", image: UIImage(named: "signupProfile"), frame: .zero)
-    let passwordForm = FormTextFieldView(labelText: "PASSWORD", placeholder: "Password", image: UIImage(named: "passwordLock"), frame: .zero, isPassword: true)
-    let forgotPasswordButt = UIButton()
     let notUserLabel = UILabel()
+    let errorLabel = UILabel()
     let signUpLabel = UILabel()
     let signUpButtMaskView = UIView()
-    let showPasswordButt = UIButton()
     let colorGradients = Constants.colors.colorGradients
     weak var delegate: LoginViewDelegate?
     
@@ -48,10 +46,7 @@ class SignInView: UIView {
     @objc private func loginButtTapped() {
         delegate?.loginButtTapped()
     }
-    
-    @objc private func showPasswordTapped() {
-        delegate?.showPasswordButtTapped()
-    }
+
     
     @objc private func signUpButtTapped() {
         print("sign up butt tapped")
@@ -70,15 +65,14 @@ class SignInView: UIView {
         titleLabel.layer.shadowRadius = 3
         titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
         titleLabel.textColor = .black//Colors.primaryColor
-        subtitleLabel.text = "Sign in to continue!"
+        subtitleLabel.text = "Sign in with your phone number to continue!"
         subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
         subtitleLabel.textColor = Constants.colors.lightGray
-        forgotPasswordButt.setTitle("Forgot Password?", for: .normal)
-        forgotPasswordButt.setTitleColor(UIColor.black, for: .normal)
-        forgotPasswordButt.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .medium)
         notUserLabel.text = "Don't have an account yet?"
         notUserLabel.textColor = .black
         notUserLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        errorLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        errorLabel.textColor = .red
         signUpButtMaskView.backgroundColor = .red
         signUpButtMaskView.isUserInteractionEnabled = false
         signUpLabel.text = "Sign Up"
@@ -87,13 +81,6 @@ class SignInView: UIView {
         signUpLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         loginButt.addTarget(self, action: #selector(loginButtTapped), for: .touchUpInside)
         numberForm.delegate = self
-        passwordForm.delegate = self
-        showPasswordButt.setTitle("Show Password", for: .normal)
-        showPasswordButt.backgroundColor = .clear
-        showPasswordButt.addTarget(self, action: #selector(showPasswordTapped), for: .touchUpInside)
-        showPasswordButt.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .medium)
-        showPasswordButt.setTitleColor(UIColor.black, for: .normal)
-        let gesture = UITapGestureRecognizer.init(target: self, action: #selector(signUpButtTapped))
         signUpButtMaskView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(signUpButtTapped)))
         signUpButtMaskView.isUserInteractionEnabled = true
         notUserLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(signUpButtTapped)))
@@ -106,10 +93,8 @@ class SignInView: UIView {
         addSubview(titleLabelMaskView)
         addSubview(titleLabel)
         addSubview(subtitleLabel)
+        addSubview(errorLabel)
         addSubview(numberForm)
-        addSubview(passwordForm)
-        addSubview(forgotPasswordButt)
-        addSubview(showPasswordButt)
         addSubview(loginButt)
         addSubview(notUserLabel)
         addSubview(signUpButtMaskView)
@@ -136,26 +121,17 @@ class SignInView: UIView {
         }
         
         numberForm.snp.makeConstraints { (make) in
-            make.top.equalTo(subtitleLabel.snp.bottom).offset(60)
+            make.centerY.equalTo(self).offset(0)
             make.leading.equalTo(titleLabel)
             make.trailing.equalTo(self).offset(-30)
             make.height.equalTo(65)
         }
         
-        passwordForm.snp.makeConstraints { (make) in
-            make.top.equalTo(numberForm.snp.bottom).offset(10)
-            make.leading.height.trailing.equalTo(numberForm)
+        errorLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(numberForm.snp.bottom).offset(16)
+            make.left.right.equalTo(numberForm)
         }
         
-        forgotPasswordButt.snp.makeConstraints { (make) in
-            make.top.equalTo(passwordForm.snp.bottom).offset(6)
-            make.trailing.equalTo(passwordForm)
-        }
-        
-        showPasswordButt.snp.makeConstraints { (make) in
-            make.top.equalTo(passwordForm.snp.bottom).offset(6)
-            make.leading.equalTo(passwordForm)
-        }
         
         loginButt.snp.makeConstraints { (make) in
             make.bottom.equalTo(self).offset(-50)

@@ -90,7 +90,7 @@ class CodeVerificationView: UIView {
         
         sendAgainButt.setTitle("Resend a new code", for: .normal)
         sendAgainButt.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-        sendAgainButt.setTitleColor(Constants.colors.primaryColor, for: .normal)
+        sendAgainButt.setTitleColor(Constants.colors.secondaryColor, for: .normal)
         sendAgainButt.snp.makeConstraints { (make) in
             make.bottom.equalTo(self).offset(-20)
             make.centerX.equalTo(self)
@@ -120,7 +120,7 @@ class CodeVerificationView: UIView {
 
     func updateBottomButt(isEnabled: Bool) {
         bottomButt.isEnabled = isEnabled
-        bottomButt.backgroundColor = isEnabled == true ? Constants.colors.primaryColor : .gray
+        bottomButt.backgroundColor = isEnabled == true ? Constants.colors.secondaryColor : .gray
     }
     
     @objc private func bottomButtTapped() {

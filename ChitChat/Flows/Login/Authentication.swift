@@ -26,63 +26,62 @@ class Authentication {
     ///   - imageData: The profile picture image data
     ///   - completion: The completion which gives the result of a `SignupResult`.
     func signUp(name: String,
-                phoneNumber: String,
-                password: String,
+                verificationObject: VerificationObject,
                 imageData: Data,
                 completion: @escaping(SignUpResult)) {
         
+        let credentials = PhoneAuthProvider.provider().credential(withVerificationID: verificationObject.id, verificationCode: verificationObject.code)
         
-        let email = "\(phoneNumber)@chitchat.com"
         
-        
-        Auth.auth().createUser(withEmail: email,
-                               password: password) {[weak self] (user, error) in
-                                guard let strongSelf = self else {
-                                    completion(.error("Error, pleases try again."))
-                                    return
-                                }
-                                // There is an error
-                                if error != nil {
-                                    guard let error = error as NSError? else {
-                                        completion(.error("Error, please try again down."))
-                                        return
-                                    }
-                                    
-                                    if let errorCode = AuthErrorCode(rawValue: error.code) {
-                                        switch errorCode {
-                                        case .emailAlreadyInUse:
-                                            completion(.error("The number is already in use for another account"))
+        Auth.auth().signIn(with: credentials) {[weak self] (authData, error) in
+            guard let strongSelf = self else {
+                completion(.error("Error, pleases try again."))
+                return
+            }
+            // There is an error
+            if error != nil {
+                guard let error = error as NSError? else {
+                    completion(.error("Error, please try again down."))
+                    return
+                }
+                
+                if let errorCode = AuthErrorCode(rawValue: error.code) {
+                    switch errorCode {
+                    case .accountExistsWithDifferentCredential, .credentialAlreadyInUse:
+                        completion(.error("The number is already in use for another account"))
+                        
+                    case .invalidCredential, .invalidPhoneNumber:
+                        completion(.error("The number is invalid"))
+                        
+                    case .internalError:
+                        completion(.error("Error, please try again down."))
+                        
+                    default:
+                        completion(.error("\(errorCode) the error code /n \(error.localizedDescription), the localized description"))
+                    }
+                }
+                return
+            }
+            
+            // Sign up Success
+            let uid = authData?.user.uid
+            
+            
+            // Store the image in the storage
+            strongSelf.uploadProfilePic(imageData: imageData,
+                                        uid: uid!) { (result) in
                                             
-                                        case .invalidEmail:
-                                            completion(.error("The number is invalid"))
-                                            
-                                        default:
-                                            completion(.error("\(errorCode) the error code /n \(error.localizedDescription), the localized description"))
-                                        }
-                                    }
-                                    return
-                                }
-                                
-                                // Sign up Success
-                                let uid = user?.user.uid
-                                
-                                
-                                // Store the image in the storage
-                                strongSelf.uploadProfilePic(imageData: imageData,
-                                                            uid: uid!) { (result) in
-                                                                
-                                                                switch result {
-                                                                case .error(let errorMessage):
-                                                                    completion(.error(errorMessage))
-                                                                    
-                                                                case .success(let profileUrl):
-                                                                    break
-                                                                    //   strongSelf.setUpFirebaseDBInfo(username: username, name: name, email: email, profileUrl: profileUrl as! String, uid: uid!, type: type, completion: completion)
-                                                                    
-                                                                case .completed(_) : break
-                                                                    
-                                                                }
-                                }
+                                            switch result {
+                                            case .error(let errorMessage):
+                                                completion(.error(errorMessage))
+                                                
+                                            case .success(let profileUrl):
+                                                strongSelf.setUpFirebaseDBInfo(name: name, phoneNumber: verificationObject.number, profileUrl: profileUrl as! String, uid: uid!, completion: completion)
+                                                
+                                            case .completed(_) : break
+                                                
+                                            }
+            }
         }
     }
     
@@ -116,6 +115,57 @@ class Authentication {
         }
     }
     
+    /// Creates a user in the db with information given
+    /// - Parameters:
+    ///   - username: The users username
+    ///   - name: The users name
+    ///   - email: The users email
+    ///   - profileUrl: The users profile image url
+    ///   - uid: The users uid
+    ///   - type: The sign up type either phone or email
+    ///   - completion: The completion that returns a success with void or an error with an error message
+    private func setUpFirebaseDBInfo(name: String,
+                                     phoneNumber: String,
+                                     profileUrl: String,
+                                     uid: String,
+                                     completion: @escaping(SignUpResult)) {
+        
+        let usersString = "Users"
+      //  let active_usernamesString = "active_usernames"
+       // let pushNotificationsString = "pushNotifications"
+        
+        // refernce
+        let ref = Constants.refs.ref
+        
+        // dictionaries
+        let userDict = [
+            "name": name,
+            "profileUrl": profileUrl]
+        
+        
+//        let badgeDict = ["notificationCount": 0,
+//                         "total": 0]
+
+        
+        
+        let childUpdates: [String:Any] = [
+            "/\(usersString)/\(uid)" : userDict,
+            "Numbers/\(phoneNumber)" : uid,
+          //  "/\(pushNotificationsString)/\(uid)/badges" : badgeDict,
+          //  "/\(pushNotificationsString)/\(uid)/notifications" : postNotifDict,
+          //  "/\(pushNotificationsString)/\(uid)/notificationsEnabled" : true,
+            ]
+        
+        
+        // set values
+        ref.updateChildValues(childUpdates)
+    
+        completion(.success(nil))
+        
+        
+        
+    }
+    
     // MARK: - Sign In
     
     /// Signs in the user to the db
@@ -124,20 +174,14 @@ class Authentication {
     ///   - password: the password the  user inputs
     ///   - completion: the completion which gives the result of  a success or errror with error message
     func signIn(text: String?,
-                password: String?,
-                completion: @escaping SignInResult) {
+                completion: @escaping PhoneVerificationResult) {
         
         guard let text = text, text.isEmpty == false else {
             completion(.error("Username / Email / Phone field cannot be empty"))
             return
         }
-        guard let password = password, password.isEmpty == false else {
-            completion(.error("Password field cannot be empty"))
-            return
-        }
-        
+      
         signInWithPhoneNumber(phoneNumber: text,
-                              password: password,
                               completion: completion)
     }
     
@@ -147,8 +191,7 @@ class Authentication {
     ///   - password: The password recieved form the user
     ///   - completion: The completion which gives the result of a `signinResult`.
     private func signInWithPhoneNumber(phoneNumber: String,
-                                       password: String,
-                                       completion: @escaping SignInResult) {
+                                       completion: @escaping PhoneVerificationResult) {
         
         // First search through the db for the specified number and return back an email
         
@@ -159,15 +202,13 @@ class Authentication {
             }
             
             // Checks to see if the phone number exists, and if there is an email
-            guard snapshot.exists(), let email = snapshot.value as? String else {
-                completion(.error("no phone number in records"))
+            guard snapshot.exists() else {
+                completion(.error("No phone number in records"))
                 return
             }
             
             // Signs the user in with the eamil from the db and the password
-            strongSelf.signInWithEmail(email: email,
-                                       password: password,
-                                       completion: completion)
+            strongSelf.sendPhoneCode(phoneNumber: phoneNumber, completion: completion)
         }
     }
     
@@ -186,9 +227,9 @@ class Authentication {
                                     if let errorCode = AuthErrorCode(rawValue: error.code) {
                                         switch errorCode {
                                         case .invalidEmail:
-                                            completion(.error("Invalid Email"))
+                                            completion(.error("Invalid Phone Number"))
                                         default:
-                                            completion(.error("Invalid Username/Email or Password"))
+                                            completion(.error("Invalid Phone Number or Password"))
                                         }
                                     }
                                 }
@@ -226,17 +267,22 @@ class Authentication {
     /// - Parameters:
     ///   - phoneNumber: The phone number to send to
     ///   - completion: The completion which gives the result of a `phoneverificationResult`.
-    func verifyPhone(phoneNumber: String,
-                     completion: @escaping(PhoneVerificationResult)) {
+    func sendPhoneCode(phoneNumber: String,
+                       completion: @escaping(PhoneVerificationResult)) {
+      
+        #if DEBUG
+            Auth.auth().settings?.isAppVerificationDisabledForTesting = true
+        #endif
         
-        //        PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { (verificationCode, error) in
-        //
-        //            guard let code = verificationCode, error == nil else {
-        //                completion(.error(error?.localizedDescription ?? ""))
-        //                return
-        //            }
-        //
-        //            completion(.success(code))
-        //        }
+        PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { (verificationId, error) in
+            
+            guard let id = verificationId, error == nil else {
+                completion(.error(error?.localizedDescription ?? ""))
+                return
+            }
+            
+            
+            completion(.success(id))
+        }
     }
 }

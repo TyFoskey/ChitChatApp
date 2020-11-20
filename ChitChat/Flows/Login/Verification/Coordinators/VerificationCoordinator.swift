@@ -16,15 +16,22 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     private let router: Router
     private let phoneKit: PhoneNumberKit
     private var currentCountry = PhoneNumberKit()
+    private let auth: Authentication
     var phoneNumber: String!
+    private let name: String
+    private let imageData: Data
+    
     
     // MARK: - Coordinator Finish Output
     var finishFlow: ((Any?) -> Void)?
     
     // MARK: - Coordinator Lifecylce
-    init(router: Router, phoneKit: PhoneNumberKit) {
+    init(router: Router, phoneKit: PhoneNumberKit, auth: Authentication, name: String, imageData: Data) {
         self.router = router
         self.phoneKit = phoneKit
+        self.auth = auth
+        self.name = name
+        self.imageData = imageData
     }
     
     func start() {
@@ -96,12 +103,18 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     private func showCodeVerificationVC(phoneNumber: String) {
         let codeVerificationVC = CodeVerificationViewController(phoneNumber: phoneNumber,
                                                                 authentication: Authentication())
-        codeVerificationVC.onVerifiedAction = {[weak self] in
+        codeVerificationVC.onVerifiedAction = {[weak self] verificationObject in
             guard let strongSelf = self else { return }
-            strongSelf.finishFlow?(strongSelf.phoneNumber)
+            strongSelf.showCompletedVC(verificationObject: verificationObject)
+            //strongSelf.finishFlow?(verificationObject)
         }
         
         router.push(codeVerificationVC)
+    }
+    
+    private func showCompletedVC(verificationObject: VerificationObject) {
+        let congratsVC = RegisterCompletedViewController(auth: auth, name: name, imageData: imageData, verificationObject: verificationObject)
+        router.push(congratsVC, hideBottomBar: true)
     }
     
 }

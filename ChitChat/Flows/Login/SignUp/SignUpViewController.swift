@@ -14,7 +14,7 @@ class SignUpViewController: UIViewController {
     // MARK: - Properties
     let signUpView = SignUpView()
     let keyboardManager = KeyboardManager()
-    var onBottomButtTap: ((String, String) -> Void)?
+    var onBottomButtTap: ((String) -> Void)?
     var onSignInButtTap: (() -> Void)?
     var isShowingPassword = false
     
@@ -76,18 +76,10 @@ extension SignUpViewController: LoginViewDelegate {
         onSignInButtTap?()
     }
     
-    func showPasswordButtTapped() {
-        isShowingPassword = !isShowingPassword
-        signUpView.passwordForm.textField.isSecureTextEntry = !isShowingPassword
-        signUpView.confirmPasswordForm.textField.isSecureTextEntry = !isShowingPassword
-        signUpView.showPasswordButt.setTitle(isShowingPassword ? "Hide Password": "Show Password", for: .normal)
-    }
-    
-    
+ 
+
     func textFieldDidChange() {
-        if signUpView.nameForm.textField.text?.isEmpty == false,
-            signUpView.passwordForm.textField.text?.isEmpty == false,
-            signUpView.confirmPasswordForm.textField.text?.isEmpty == false {
+        if signUpView.nameForm.textField.text?.isEmpty == false {
             if signUpView.loginButt.isEnabled == false {
                 print("making it valid")
                 signUpView.loginButt.isValid()
@@ -106,24 +98,11 @@ extension SignUpViewController: LoginViewDelegate {
             return
         }
         
-        guard let passwordText = signUpView.passwordForm.textField.text else {
-            signUpView.passwordForm.showError(withErrorMessage: "Please enter your password")
-            return
-        }
-        
-        guard let conformPasswordText = signUpView.confirmPasswordForm.textField.text else {
-            signUpView.confirmPasswordForm.showError(withErrorMessage: "Please confirm your password")
-            return
-        }
         
         validate(type: .name, text: nameText) {[weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.validate(type: .password, text: passwordText) {
-                strongSelf.validate(type: .confirmPassword, text: conformPasswordText) {
-                    print("next please")
-                    strongSelf.onBottomButtTap?(nameText, passwordText)
-                }
-            }
+            strongSelf.onBottomButtTap?(nameText)
+
         }
     }
     
@@ -142,22 +121,7 @@ extension SignUpViewController: LoginViewDelegate {
                 }
             }
             
-        case .password:
-            let (isValidPassword, errorText) = Constants.validate.isValidPassword(password: text)
-            switch isValidPassword {
-            case true:
-                signUpView.passwordForm.hideError(showSuccess: true)
-                completion()
-            default:
-                signUpView.passwordForm.showError(withErrorMessage: errorText)
-            }
-            
-        case .confirmPassword:
-            if signUpView.passwordForm.textField.text == signUpView.confirmPasswordForm.textField.text {
-                completion()
-            } else {
-                signUpView.confirmPasswordForm.showError(withErrorMessage: "Confirm Password must match password")
-            }
+        default: break
         }
     }
 

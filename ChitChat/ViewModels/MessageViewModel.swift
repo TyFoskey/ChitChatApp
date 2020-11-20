@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import IGListKit
+import FirebaseAuth
 
 class MessageViewModel {
     
@@ -20,7 +21,7 @@ class MessageViewModel {
     init(message: Message, user: Users, isSending: Bool? = nil) {
         self.message = message
         self.user = user
-        self.isFrom = false//message.fromId == Auth.auth().currentUser?.uid
+        self.isFrom = message.fromId == Auth.auth().currentUser?.uid
         self.isSending = isSending ?? false
         if isFrom == true {
             self.chatId = message.toId
@@ -79,7 +80,7 @@ class MessageViewModel {
             switch messageKind {
                 
             case .text:
-               return getTextSize()
+               return getTextSize() + 10
                 
             case .photo:
 
@@ -128,4 +129,31 @@ class MessageViewModel {
         }
         
     
+}
+
+// MARK: - ListDiffable
+extension MessageViewModel: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return "Message-\(message.id)" as NSObject
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        guard let newMessageView = object as? MessageViewModel else {return false}
+        guard self !== object else {return true}
+        return self == newMessageView
+    }
+    
+}
+
+
+// MARK: - Equatable
+extension MessageViewModel: Equatable {
+    static func == (lhs: MessageViewModel, rhs: MessageViewModel) -> Bool {
+        return lhs.message == rhs.message &&
+            lhs.chatId == rhs.chatId &&
+            lhs.user == rhs.user &&
+            lhs.isFrom == rhs.isFrom &&
+            lhs.isSending == rhs.isSending
+    }
+
 }

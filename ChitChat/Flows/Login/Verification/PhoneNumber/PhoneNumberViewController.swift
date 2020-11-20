@@ -97,7 +97,14 @@ extension PhoneNumberViewController: PhoneNumberViewDelegate {
         guard let numberText = phoneNumberView.numberForm.phoneTextField.text else {
             return
         }
-        onButtomButtTap?(numberText)
+        
+        do {
+            let parsedNumber = try phoneNumberView.numberForm.phoneTextField.phoneNumberKit.parse(numberText)
+            let number = phoneNumberView.numberForm.phoneTextField.phoneNumberKit.format(parsedNumber, toType: .e164)
+            onButtomButtTap?(number)
+        } catch {
+            print("parsing error")
+        }
     }
     
     func codeButtTapped() {

@@ -11,7 +11,6 @@ import UIKit
 protocol LoginViewDelegate: class {
     func loginButtTapped()
     func textFieldDidChange()
-    func showPasswordButtTapped()
     func switchViewsButtTapped()
 }
 

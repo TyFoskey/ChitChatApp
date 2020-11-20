@@ -13,9 +13,10 @@ class SignInViewController: UIViewController {
     // MARK: - Properties
     let signInView = SignInView()
     let keyboardManager = KeyboardManager()
-    var onBottomButtTap: ((Bool) -> Void)?
+    var onBottomButtTap: ((String) -> Void)?
     var onSignUpButtTap: (() -> Void)?
     var isShowingPassword = false
+    let authentication: Authentication
     
     // MARK: - View Controller Lifecycle
     override func viewDidLoad() {
@@ -32,7 +33,8 @@ class SignInViewController: UIViewController {
         setKeyboard()
     }
     
-    init() {
+    init(auth: Authentication) {
+        self.authentication = auth
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -74,16 +76,9 @@ extension SignInViewController: LoginViewDelegate {
         onSignUpButtTap?()
     }
     
-    func showPasswordButtTapped() {
-        isShowingPassword = !isShowingPassword
-        signInView.passwordForm.textField.isSecureTextEntry = !isShowingPassword
-        signInView.showPasswordButt.setTitle(isShowingPassword ? "Hide Password": "Show Password", for: .normal)
-    }
-    
-    
+
     func textFieldDidChange() {
-        if signInView.numberForm.textField.text?.isEmpty == false,
-            signInView.passwordForm.textField.text?.isEmpty == false {
+        if signInView.numberForm.textField.text?.isEmpty == false {
             if signInView.loginButt.isEnabled == false {
                 print("making it valid")
                 signInView.loginButt.isValid()
@@ -97,17 +92,24 @@ extension SignInViewController: LoginViewDelegate {
     }
     
     func loginButtTapped() {
+        signInView.loginButt.isEnabled = false
         guard let numberText = signInView.numberForm.textField.text else {
             signInView.numberForm.showError(withErrorMessage: "Please enter your number")
             return
         }
         
-        guard let passwordText = signInView.passwordForm.textField.text else {
-            signInView.passwordForm.showError(withErrorMessage: "Please enter your password")
-            return
-        }
         
-        onBottomButtTap?(true)
+        authentication.signIn(text: numberText) {[weak self] (result) in
+                                guard let strongSelf = self else { return }
+                                switch result {
+                                case .success(let verificaionId):
+                                    strongSelf.onBottomButtTap?(verificaionId)
+                                case .error(let errorMessage):
+                                    strongSelf.signInView.errorLabel.text = errorMessage
+                                    strongSelf.signInView.loginButt.isEnabled = true
+                                default: break
+                                }
+        }
         print("login butt tapped")
     }
     

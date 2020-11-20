@@ -14,10 +14,15 @@ class RegisterCompletedViewController: UIViewController {
     // MARK: - Properties
     var registerCompletedView = RegisterCompletedView()
     var onBottomButtTap: (() -> Void)?
+    let name: String
+    let imageData: Data
+    let auth: Authentication
+    let verificationObject: VerificationObject
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.setHidesBackButton(true, animated: true)
         view.backgroundColor = .white
         view.addSubview(registerCompletedView)
         registerCompletedView.snp.makeConstraints { (make) in
@@ -25,20 +30,24 @@ class RegisterCompletedViewController: UIViewController {
             make.left.right.equalTo(view)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin)
         }
-        registerCompletedView.bottomButt.addTarget(self, action: #selector(bottomButtTapped), for: .touchUpInside)
-        unhideButtonButt()
+        registerCompletedView.delegate = self
+        signUp()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        navigationController?.navigationBar.barStyle = .black
+       // navigationController?.navigationBar.barStyle = .black
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        .lightContent
-    }
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        .lightContent
+//    }
     
-    init() {
+    init(auth: Authentication, name: String, imageData: Data, verificationObject: VerificationObject) {
+        self.auth = auth
+        self.name = name
+        self.imageData = imageData
+        self.verificationObject = verificationObject
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -47,25 +56,55 @@ class RegisterCompletedViewController: UIViewController {
     }
     
     
+    
+    
     // MARK: - Private functions
-    @objc private func bottomButtTapped() {
-        onBottomButtTap?()
+    private func signUp() {
+        auth.signUp(name: name,
+                    verificationObject: verificationObject,
+                    imageData: imageData) {[weak self] (result) in
+                        guard let strongSelf = self else { return }
+                        switch result {
+                        case.success(_):
+                            strongSelf.unhideButtonButt()
+                        case .error(let errorMessage):
+                            print(errorMessage, "error Message")
+                        default: break
+                        }
+        }
+        
     }
     
     
+
     private func unhideButtonButt() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) { [weak self] in
             guard let strongSelf = self else { return }
-            
+            strongSelf.registerCompletedView.circleSpinner.isHidden = true
+            strongSelf.registerCompletedView.loadingLabel.isHidden = true
+            strongSelf.registerCompletedView.imageView.isHidden = false
+            strongSelf.registerCompletedView.statusLabel.isHidden = false
+            strongSelf.registerCompletedView.bottomLabel.isHidden = false
+            strongSelf.registerCompletedView.bottomButt.isEnabled = true
             UIView.transition(with: strongSelf.registerCompletedView.bottomButt,
-                              duration: 0.8,
+                              duration: 3.8,
                               options: .transitionCrossDissolve,
                               animations: {
                                 
-                                strongSelf.registerCompletedView.bottomButt.isHidden = false
+                                 strongSelf.registerCompletedView.bottomButt.isHidden = false
+                                
                                 
             }, completion: nil)
         }
     }
     
+    
+    
+}
+
+// MARK: - CompletedView Delegate
+extension RegisterCompletedViewController: RegisterCompletedViewDelegate {
+    func bottomButtTapped() {
+        onBottomButtTap?()
+    }
 }

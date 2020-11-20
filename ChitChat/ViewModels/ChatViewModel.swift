@@ -6,10 +6,9 @@
 //  Copyright © 2020 ty foskey. All rights reserved.
 //
 
-import Foundation
+import IGListKit
 
-
-class ChatViewModel {
+class ChatViewModel: ListDiffable {
   
     let users: [Users]
     let messageView: MessageViewModel
@@ -60,7 +59,7 @@ class ChatViewModel {
                 usernameText = user.name
                 isFirst = false
             } else {
-                usernameText = usernameText + ",\(user.name)"
+                usernameText = usernameText + ", \(user.name)"
             }
         }
         return usernameText
@@ -69,15 +68,15 @@ class ChatViewModel {
     
     // MARK: - List Diffable
     
-//    func diffIdentifier() -> NSObjectProtocol {
-//        return "chatId\(id)" as NSObject
-//    }
-//
-//    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-//        guard let chatView = object as? ChatViewModel else {return false}
-//        guard self !== object else {return true}
-//        return true
-//        //return users == chatView.users && id == chatView.id && messageView == chatView.messageView && isFromUser == chatView.isFromUser && timeText == chatView.timeText
-//    }
+    func diffIdentifier() -> NSObjectProtocol {
+        return "chatId\(id)" as NSObject
+    }
+
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        guard let chatView = object as? ChatViewModel else {return false}
+        guard self !== object else {return true}
+        return true
+        //return users == chatView.users && id == chatView.id && messageView == chatView.messageView && isFromUser == chatView.isFromUser && timeText == chatView.timeText
+    }
     
 }
