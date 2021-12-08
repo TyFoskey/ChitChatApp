@@ -14,10 +14,12 @@ class RegisterCompletedViewController: UIViewController {
     // MARK: - Properties
     var registerCompletedView = RegisterCompletedView()
     var onBottomButtTap: (() -> Void)?
-    let name: String
-    let imageData: Data
+    var onGoToRegisterProfile: (() -> Void)?
+    let signInRegistrationType: SignInRegistrationType
+//    let name: String
+//    let imageData: Data
     let auth: Authentication
-    let verificationObject: VerificationObject
+   // let verificationObject: VerificationObject
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -43,11 +45,12 @@ class RegisterCompletedViewController: UIViewController {
 //        .lightContent
 //    }
     
-    init(auth: Authentication, name: String, imageData: Data, verificationObject: VerificationObject) {
+    init(auth: Authentication, type: SignInRegistrationType) {
         self.auth = auth
-        self.name = name
-        self.imageData = imageData
-        self.verificationObject = verificationObject
+        self.signInRegistrationType = type
+//        self.name = name
+//        self.imageData = imageData
+//        self.verificationObject = verificationObject
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -60,22 +63,66 @@ class RegisterCompletedViewController: UIViewController {
     
     // MARK: - Private functions
     private func signUp() {
-        auth.signUp(name: name,
-                    verificationObject: verificationObject,
-                    imageData: imageData) {[weak self] (result) in
-                        guard let strongSelf = self else { return }
-                        switch result {
-                        case.success(_):
-                            strongSelf.unhideButtonButt()
-                        case .error(let errorMessage):
-                            print(errorMessage, "error Message")
-                        default: break
+        switch signInRegistrationType {
+        case .social(let id, let name, let profileUrl):
+            auth.checkIfUserInDB(id: id) {[weak self] isUserInDB in
+                guard let strongSelf = self else { return }
+                if isUserInDB {
+                    strongSelf.onBottomButtTap?()
+                } else {
+                    if profileUrl != nil {
+                        // sign up with name and profile
+                        strongSelf.auth.setUpFirebaseDBInfo(name: name, phoneNumber: nil, profileUrl: profileUrl!, uid: id) { result in
+                            strongSelf.signUpHandle(result: result)
                         }
+                    } else {
+                        // go to create profile image screen
+                        strongSelf.onGoToRegisterProfile?()
+                    }
+                }
+            }
+        case .phoneNumber(let name, let imageData, let verificationObject):
+            auth.signUp(name: name,
+                        verificationObject: verificationObject,
+                        imageData: imageData) {[weak self] (result) in
+                guard let strongSelf = self else { return }
+                strongSelf.signUpHandle(result: result)
+            }
+            
+        case .createProfile(let id, let name, let imageData):
+            auth.createUserWithProfilePic(uid: id, imageData: imageData, name: name, phoneNumber: nil) {[weak self] result in
+                guard let strongSelf = self else { return }
+                strongSelf.signUpHandle(result: result)
+            }
+            
+        case .signIn(let verificationObject):
+            auth.signIn(verificationObject: verificationObject) {[weak self] result in
+                guard let strongSelf = self else { return }
+                strongSelf.signInHandle(result: result)
+            }
         }
         
     }
     
+    private func signUpHandle(result: Result<Any?>) {
+        switch result {
+        case.success(_):
+            unhideButtonButt()
+        case .error(let errorMessage):
+            print(errorMessage, "error Message")
+        default: break
+        }
+    }
     
+    private func signInHandle(result: Result<String>) {
+        switch result {
+        case.success(_):
+            unhideButtonButt()
+        case .error(let errorMessage):
+            print(errorMessage, "error Message")
+        default: break
+        }
+    }
 
     private func unhideButtonButt() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) { [weak self] in

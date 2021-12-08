@@ -6,17 +6,18 @@
 //  Copyright © 2020 ty foskey. All rights reserved.
 //
 
-import Firebase
+import FirebaseDatabase
 
 class References {
     let ref = Database.database().reference()
-    let userRef = Database.database().reference().child("User")
+    let userRef = Database.database().reference().child("Users")
     var postRef = Database.database().reference().child("post")
     let notificationRef = Database.database().reference().child("notifications")
     let messagesRef = Database.database().reference().child("messages")
     let userMessagesRef = Database.database().reference().child("userMessages")
     let emailsRef = Database.database().reference().child("Emails")
-    let phoneNumberRef = Database.database().reference().child("phoneNumbers")
+    let phoneNumberRef = Database.database().reference().child("Numbers")
     let pushNotificationsRef = Database.database().reference().child("pushNotifications")
+    let userChatsRef = Database.database().reference().child("userChats")
     
 }

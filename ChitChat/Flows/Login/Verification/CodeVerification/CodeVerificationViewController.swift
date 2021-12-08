@@ -23,10 +23,12 @@ class CodeVerificationViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.setHidesBackButton(true, animated: true)
         setUpKeyboard()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(verifyView)
-        verifyView.codeView.delegate = self
+        addCustomBackButton()
+        verifyView.delegate = self
         verifyView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
             make.left.right.equalTo(view)
@@ -59,7 +61,7 @@ class CodeVerificationViewController: UIViewController {
             guard let strongSelf = self else { return }
             switch result {
             case .error(let errorMessage):
-                print(errorMessage)
+                print(errorMessage, "the send phone code authentication error")
             case .success(let verificationId):
                 strongSelf.verificationId = verificationId
                 print("got verificationId")
@@ -101,13 +103,13 @@ class CodeVerificationViewController: UIViewController {
     
 }
 
-extension CodeVerificationViewController: CodeViewDelegate {
+extension CodeVerificationViewController: CodeVerificationViewDelegate {
     func didChangeCharacters() {
+        print("changing characters")
         if verifyView.codeView.isAnimating == false {
             verifyView.errorLabel.isHidden = true
         }
-        verifyView.updateBottomButt(isEnabled: verifyView.codeView.hasValidCode()
-                                    && verificationId != nil)
+        verifyView.updateBottomButt(isEnabled: verifyView.codeView.hasValidCode())
     }
     
     func verifyNumber(code: String) {
@@ -118,6 +120,10 @@ extension CodeVerificationViewController: CodeViewDelegate {
 //        } else {
 //            verifyView.setWrongValue()
 //        }
+    }
+    
+    func resendCode() {
+        print("resend tapped")
     }
     
 }

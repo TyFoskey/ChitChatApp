@@ -10,7 +10,7 @@ import UIKit
 
 final class Router: NSObject, RouterType {
     
-    private weak var navigationController: UINavigationController?
+    weak var navigationController: UINavigationController?
     private var completions: [UIViewController : () -> Void]
     
     init(navigationController: UINavigationController) {

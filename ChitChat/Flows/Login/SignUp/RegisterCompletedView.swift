@@ -99,7 +99,7 @@ class RegisterCompletedView: UIView {
             make.height.width.equalTo(250)
         }
         
-        loadingLabel.text = "Signing up..."
+        loadingLabel.text = "Loading..."
         loadingLabel.textAlignment = .center
         loadingLabel.textColor = .gray
         loadingLabel.font = UIFont.systemFont(ofSize: 20, weight: .regular)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BAB9AB6EB252264FABBBA1BF7977858A"
+               BlueprintIdentifier = "4874E7E655CEB4C01E4572AD903AEA21"
+               BuildableName = "FloatingPanel.framework"
                BlueprintName = "FloatingPanel"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "FloatingPanel.framework">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

@@ -11,17 +11,70 @@ import SnapKit
 
 class SignUpView: UIView {
     
-    // MARK: - Properties
-    let titleLabel = UILabel()
-    let titleLabelMaskView = UIView()
-    let subtitleLabel = UILabel()
+    // MARK: - Views
+    let titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = "Create Account,"
+        titleLabel.backgroundColor = .clear
+        titleLabel.layer.shadowOpacity = 0.2
+        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
+        titleLabel.layer.shadowRadius = 3
+        titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
+        titleLabel.textColor = .label//Colors.primaryColor
+        return titleLabel
+    }()
+    
+    let titleLabelMaskView: UIView = {
+        let titleLabelMaskView = UIView()
+        titleLabelMaskView.backgroundColor = .red
+        return titleLabelMaskView
+    }()
+    
+    let subtitleLabel: UILabel = {
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "What's your name" //"Sign up to get started!"
+        subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        subtitleLabel.textColor =  .secondaryLabel//Constants.colors.lightGray
+        return subtitleLabel
+    }()
+    
+    let alreadyUserLabel: UILabel = {
+        let alreadyUserLabel = UILabel()
+        alreadyUserLabel.text = "Already have an account?"
+        alreadyUserLabel.textColor = .label
+        alreadyUserLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        alreadyUserLabel.isUserInteractionEnabled = true
+        return alreadyUserLabel
+    }()
+    
+    let signInLabel: UILabel = {
+        let signInLabel = UILabel()
+        signInLabel.text = "Sign In"
+        signInLabel.backgroundColor = .clear
+        signInLabel.textColor = .label
+        signInLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        return signInLabel
+    }()
+    
+    let signInButtMaskView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        view.isUserInteractionEnabled = true
+        return view
+    }()
+    
     let loginButt = LoginButt()
     let nameForm = FormTextFieldView(labelText: "FULL NAME", placeholder: "Full Name", image: UIImage(named: "signupProfile"), frame: .zero)
-    let alreadyUserLabel = UILabel()
-    let signInLabel = UILabel()
-    let signInButtMaskView = UIView()
+    
+    
+    // MARK: - Properties
     let colorGradients = Constants.colors.colorGradients
-    weak var delegate: LoginViewDelegate?
+    weak var delegate: SignInDelegate?
+    
+    var numberFormCenterConstr: Constraint!
+    var numberFormBottomConstr: Constraint!
+    var loginButtBottomConstr: Constraint!
 
 
     // MARK: - View Lifecycle
@@ -55,33 +108,11 @@ class SignUpView: UIView {
     
     // MARK: - Set up
     private func setUp() {
-        self.backgroundColor = .white
-        titleLabelMaskView.backgroundColor = .red
-        titleLabel.text = "Create Account,"
-        titleLabel.backgroundColor = .clear
-        titleLabel.layer.shadowOpacity = 0.2
-        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
-        titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
-        titleLabel.layer.shadowRadius = 3
-        titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
-        titleLabel.textColor = .black//Colors.primaryColor
-        subtitleLabel.text = "What's your name" //"Sign up to get started!"
-        subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        subtitleLabel.textColor = Constants.colors.lightGray
-        alreadyUserLabel.text = "Already have an account?"
-        alreadyUserLabel.textColor = .black
-        alreadyUserLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        signInButtMaskView.backgroundColor = .red
-        signInLabel.text = "Sign In"
-        signInLabel.backgroundColor = .clear
-        signInLabel.textColor = .black
-        signInLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        self.backgroundColor = .systemBackground
         loginButt.addTarget(self, action: #selector(loginButtTapped), for: .touchUpInside)
-        nameForm.delegate = self
         signInButtMaskView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(signUpButtTapped)))
-        signInButtMaskView.isUserInteractionEnabled = true
         alreadyUserLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(signUpButtTapped)))
-        alreadyUserLabel.isUserInteractionEnabled = true
+        nameForm.delegate = self
         addSubviews()
         setConstraints()
     }
@@ -117,18 +148,23 @@ class SignUpView: UIView {
         }
         
         nameForm.snp.makeConstraints { (make) in
-            make.centerY.equalTo(self).offset(0)
+            numberFormCenterConstr = make.centerY.equalTo(self).constraint
+            numberFormBottomConstr = make.bottom.equalTo(loginButt.snp.top).offset(-30).constraint
             make.leading.equalTo(titleLabel)
             make.trailing.equalTo(self).offset(-30)
             make.height.equalTo(65)
         }
         
- 
+        numberFormBottomConstr.deactivate()
+        numberFormCenterConstr.activate()
+        
         loginButt.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self).offset(-50)
+            loginButtBottomConstr = make.bottom.equalTo(self).offset(-50).constraint
             make.leading.trailing.equalTo(nameForm)
             make.height.equalTo(50)
         }
+        
+        loginButtBottomConstr.activate()
         
         alreadyUserLabel.snp.makeConstraints { (make) in
             make.top.equalTo(loginButt.snp.bottom).offset(12)

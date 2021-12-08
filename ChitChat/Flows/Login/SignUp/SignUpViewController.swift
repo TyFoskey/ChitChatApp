@@ -22,7 +22,7 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.setHidesBackButton(true, animated: true)
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(signUpView)
         signUpView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
@@ -49,7 +49,7 @@ class SignUpViewController: UIViewController {
     // MARK: - Keyboard Manager
     private func setKeyboard() {
         keyboardManager.on(event: .willShow) {[weak self] (notification) in
-            self?.animateButton(to: -notification.endFrame.height)
+            self?.animateButton(to: -notification.endFrame.height - 10)
         }
         
         keyboardManager.on(event: .willHide) {[weak self] (notification) in
@@ -60,24 +60,32 @@ class SignUpViewController: UIViewController {
     
     private func animateButton(to height: CGFloat) {
           UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2, options: .curveEaseOut, animations: {[weak self] in
-              self?.signUpView.loginButt.snp.updateConstraints { (make) in
-                  make.bottom.equalTo(height)
-              }
+              self?.signUpView.loginButtBottomConstr.update(offset: height)
+              self?.setNumberFormConstraints(height: height)
               self?.signUpView.layoutIfNeeded()
           }, completion: nil)
         
       }
     
+    private func setNumberFormConstraints(height: CGFloat) {
+        if height != -50 {
+            signUpView.numberFormCenterConstr.deactivate()
+            signUpView.numberFormBottomConstr.activate()
+        } else {
+            signUpView.numberFormBottomConstr.deactivate()
+            signUpView.numberFormCenterConstr.activate()
+        }
+    }
+    
 }
 
 // MARK: - TextField Delegate
-extension SignUpViewController: LoginViewDelegate {
+extension SignUpViewController: SignInDelegate {
     func switchViewsButtTapped() {
         onSignInButtTap?()
     }
     
  
-
     func textFieldDidChange() {
         if signUpView.nameForm.textField.text?.isEmpty == false {
             if signUpView.loginButt.isEnabled == false {

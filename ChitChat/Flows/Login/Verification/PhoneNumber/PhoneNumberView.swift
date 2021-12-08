@@ -13,9 +13,28 @@ import SnapKit
 class PhoneNumberView: UIView {
     
     // MARK: - Properties
-    let titleLabel = UILabel()
+    let titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = "Sign Up,"
+        titleLabel.backgroundColor = .clear
+        titleLabel.layer.shadowOpacity = 0.2
+        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
+        titleLabel.layer.shadowRadius = 3
+        titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
+        titleLabel.textColor = .label//Colors.primaryColor
+        return titleLabel
+    }()
+    
+    let subtitleLabel: UILabel = {
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "Please enter your phone number"
+        subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        subtitleLabel.textColor = .secondaryLabel
+        return subtitleLabel
+    }()
+    
     let titleLabelMaskView = UIView()
-    let subtitleLabel = UILabel()
     let nextButt = LoginButt()
     let numberForm = NumberFormTextField()
     let colorGradients = Constants.colors.colorGradients
@@ -46,19 +65,8 @@ class PhoneNumberView: UIView {
     
     // MARK: - Set Up
     private func setUp() {
-        self.backgroundColor = .white
+        self.backgroundColor = .systemBackground
         titleLabelMaskView.backgroundColor = .red
-        titleLabel.text = "Sign Up,"
-        titleLabel.backgroundColor = .clear
-        titleLabel.layer.shadowOpacity = 0.2
-        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
-        titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
-        titleLabel.layer.shadowRadius = 3
-        titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
-        titleLabel.textColor = .black//Colors.primaryColor
-        subtitleLabel.text = "Please enter your phone number"
-        subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        subtitleLabel.textColor = Constants.colors.lightGray
         nextButt.addTarget(self, action: #selector(loginButtTapped), for: .touchUpInside)
         numberForm.delegate = self
         addSubviews()
@@ -76,7 +84,7 @@ class PhoneNumberView: UIView {
     private func setConstraints() {
         
         titleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self).offset(0)
+            make.top.equalTo(self).offset(50)
             make.leading.equalTo(self).offset(30)
         }
         

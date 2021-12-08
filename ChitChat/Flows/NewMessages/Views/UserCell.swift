@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import SDWebImage
 
 class UserCell: UICollectionViewCell {
     
     // MARK: - Properties
     let profilePic = UIImageView()
     let nameLabel = UILabel()
-    let numberLabel = UILabel()
+   // let numberLabel = UILabel()
     let selectedView = UIView()
     let bottomView = UIView()
     let profilePicHeight: CGFloat = 45
@@ -38,11 +39,13 @@ class UserCell: UICollectionViewCell {
     // MARK: - Update Cell
     private func updateCell() {
         nameLabel.text = user.name
-        numberLabel.text = user.phoneNumber
+        guard let url = URL(string: user.profilePhotoUrl) else { return }
+        profilePic.sd_setImage(with: url, completed: nil)
+       // numberLabel.text = user.phoneNumber
     }
     
     func setSelectedView(isSelected: Bool) {
-        selectedView.backgroundColor = (isSelected == true) ? Constants.colors.secondaryColor : .white
+        selectedView.backgroundColor = (isSelected == true) ? Constants.colors.secondaryColor : .systemBackground
     }
     
     
@@ -50,12 +53,13 @@ class UserCell: UICollectionViewCell {
     private func setUp() {
         addSubview(profilePic)
         addSubview(nameLabel)
-        addSubview(numberLabel)
+       // addSubview(numberLabel)
         addSubview(selectedView)
         addSubview(bottomView)
         
+        profilePic.clipsToBounds = true
         profilePic.layer.cornerRadius = profilePicHeight / 2
-        profilePic.backgroundColor = .red
+        profilePic.backgroundColor = .secondaryLabel
         profilePic.snp.makeConstraints { (make) in
             make.width.height.equalTo(profilePicHeight)
             make.centerY.equalTo(self)
@@ -67,16 +71,16 @@ class UserCell: UICollectionViewCell {
         nameLabel.allowsDefaultTighteningForTruncation = true
         nameLabel.snp.makeConstraints { (make) in
             make.left.equalTo(profilePic.snp.right).offset(8)
-            make.top.equalTo(profilePic).offset(5)
+            make.centerY.equalTo(profilePic).offset(0)
         }
         
-        numberLabel.font = UIFont.systemFont(ofSize: 12)
-        numberLabel.textColor = .lightGray
-        numberLabel.numberOfLines = 1
-        numberLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(nameLabel)
-            make.top.equalTo(nameLabel.snp.bottom).offset(3)
-        }
+//        numberLabel.font = UIFont.systemFont(ofSize: 12)
+//        numberLabel.textColor = .secondaryLabel
+//        numberLabel.numberOfLines = 1
+//        numberLabel.snp.makeConstraints { (make) in
+//            make.left.equalTo(nameLabel)
+//            make.top.equalTo(nameLabel.snp.bottom).offset(3)
+//        }
         
         selectedView.layer.cornerRadius = selectedViewHeight / 2
         selectedView.layer.borderWidth = 2
@@ -87,7 +91,7 @@ class UserCell: UICollectionViewCell {
             make.right.equalTo(self).offset(-16)
         }
         
-        bottomView.backgroundColor = UIColor.groupTableViewBackground
+        bottomView.backgroundColor = UIColor.secondarySystemBackground
         bottomView.snp.makeConstraints { (make) in
             make.bottom.equalTo(self)
             make.left.right.equalTo(self)

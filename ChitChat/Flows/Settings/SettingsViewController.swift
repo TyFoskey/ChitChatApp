@@ -9,17 +9,20 @@
 import UIKit
 import IGListKit
 import CropViewController
+import SVProgressHUD
 
 class SettingsViewController: UIViewController {
     
     // MARK: - Properties
-  
+    let usersManager = UsersManager()
     let settingsView = SettingsView()
     var onSignOut: (()-> Void)?
+    let auth = Authentication()
     let assetManager = AssetManager()
     let settingsController = SettingsModelController(dataFetcher: DataFetcher())
     var isNumberTextFieldNil = false
     var isNameTextFieldNil = false
+    var cells = [SettingsCellViewModel]()
 
     
     lazy var adapter: ListAdapter = {
@@ -31,7 +34,8 @@ class SettingsViewController: UIViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        usersManager.delegate = self
+        view.backgroundColor = .systemBackground
         navigationController?.navigationItem.largeTitleDisplayMode = .never
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.title = "Settings"
@@ -39,6 +43,7 @@ class SettingsViewController: UIViewController {
         doneButt.isEnabled = false
         navigationItem.rightBarButtonItem = doneButt
         view.addSubview(settingsView)
+        settingsView.delegate = self
         settingsView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.right.equalTo(view)
@@ -46,6 +51,7 @@ class SettingsViewController: UIViewController {
         }
         adapter.collectionView = settingsView.collectionView
         setUpToHideKeyboardOnTapOnView()
+        usersManager.fetchCurrentUser()
 
     }
     
@@ -58,29 +64,44 @@ class SettingsViewController: UIViewController {
     }
     
     // MARK: - Get Cells
-    func getCells() -> [SettingsCellViewModel] {
+    func getCells(user: Users) {
      
         let titleFont = UIFont.systemFont(ofSize: 14, weight: .semibold)
         
-        let profilePicCell = SettingsCellViewModel(text: "", cellType: .profilePic)
+        let profilePicCell = SettingsCellViewModel(text: user.profilePhotoUrl, cellType: .profilePic)
         let nameTitle = SettingsCellViewModel(text: "\n \n \n Name", cellType: .text, textFont: titleFont)
-        let nameTextViewCell = SettingsCellViewModel(text: "Tyler Fort-Foskey", cellType: .textField, maxCharCount: 100, placeholderText: "Name")
+        let nameTextViewCell = SettingsCellViewModel(text: user.name, cellType: .textField, maxCharCount: 100, placeholderText: "Name")
         let numberTitle = SettingsCellViewModel(text: "\n\n Phone Number", cellType: .text, textFont: titleFont)
-        let numberTextFeildCell = SettingsCellViewModel(text: " ", cellType: .textField, placeholderText: "Phone Number")
+        let numberTextFeildCell = SettingsCellViewModel(text: user.phoneNumber ?? " ", cellType: .textField, placeholderText: "Phone Number")
         
-        return [profilePicCell,
+        cells = [profilePicCell,
                 nameTitle,
                 nameTextViewCell,
                 numberTitle,
                 numberTextFeildCell]
+        adapter.performUpdates(animated: true, completion: nil)
     }
     
     private func verifyDoneButt() {
-        navigationItem.rightBarButtonItem?.isEnabled = isNumberTextFieldNil == false && isNameTextFieldNil == false
+        navigationItem.rightBarButtonItem?.isEnabled = settingsController.nameChange || settingsController.numberChange || settingsController.profilePicChange
     }
     
     @objc private func doneTapped() {
-        
+        SVProgressHUD.show()
+        settingsController.updateSettings() { result in
+            switch result {
+            case .completed(_):
+                break
+                
+            case .error(let error):
+                SVProgressHUD.showError(withStatus: "Error")
+                print(error, "the settings error")
+                
+            case .success(let success):
+                SVProgressHUD.showSuccess(withStatus: "Success!")
+                print("success!!")
+            }
+        }
     }
   
 }
@@ -88,7 +109,7 @@ class SettingsViewController: UIViewController {
 // MARK: - List Adapter Datasource
 extension SettingsViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return getCells() as [ListDiffable]
+        return cells as [ListDiffable]
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
@@ -103,6 +124,20 @@ extension SettingsViewController: ListAdapterDataSource {
     
 }
 
+// MARK: - Users Manager Delegate
+extension SettingsViewController: UsersManagerDelegate {
+    func showError(error: String) {
+        
+    }
+    
+    func setUsers(users: [Users]) {
+        
+    }
+    
+    func currentUser(user: Users) {
+        getCells(user: user)
+    }
+}
 
 // MARK: - Settings Delegate
 extension SettingsViewController: SettingsDelegate {
@@ -127,7 +162,22 @@ extension SettingsViewController: SettingsDelegate {
     }
     
     func signOut() {
-        onSignOut?()
+        SVProgressHUD.show(withStatus: "Signing Out")
+        auth.signOut {[weak self] result in
+            guard let strongSelf = self else { return }
+            switch result {
+            case .error(let errorMessage):
+                SVProgressHUD.showError(withStatus: "Sign out error")
+
+                
+            case .success(()):
+                SVProgressHUD.showSuccess(withStatus: "Signed Out")
+                strongSelf.onSignOut?()
+                
+            default:
+                break
+            }
+        }
     }
     
     func textFieldDidChange(textFieldType: SettingsTextFeildType, text: String?) {

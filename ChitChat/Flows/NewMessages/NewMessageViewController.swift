@@ -9,15 +9,19 @@
 import UIKit
 import SnapKit
 import IGListKit
+import FirebaseAuth
 
 class NewMessageViewController: UIViewController {
     
     // MARK: - Properties
     let searchView = SearchView()
     let keyboardManager = KeyboardManager()
+    let usersManager = UsersManager()
     var selectedUsers = [Users]()
     var users = [Users]()
     var objects = [ListDiffable]()
+    var doneButt: UIBarButtonItem!
+    var onGoToMessages: ((String, [Users], String) -> Void)?
     
     lazy var adapter: ListAdapter = {
         let adapater = ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 0)
@@ -28,15 +32,19 @@ class NewMessageViewController: UIViewController {
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        usersManager.delegate = self
+        view.backgroundColor = .systemBackground
         navigationController?.navigationItem.largeTitleDisplayMode = .never
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.title = "New Chat"
+        doneButt = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneTapped))
+        doneButt.isEnabled = false
+        navigationItem.rightBarButtonItem = doneButt
         adapter.collectionView = searchView.collectionView
         setUp()
         setUpToHideKeyboardOnTapOnView()
         setKeyboard()
-        getUsers()
+        usersManager.fetchAllUsers()
     }
     
     init() {
@@ -95,6 +103,68 @@ class NewMessageViewController: UIViewController {
         
     }
     
+    // MARK: - Actions
+    @objc private func doneTapped() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        var ids = selectedUsers.map({
+            return $0.id
+        })
+        
+        var chatId: String!
+        let chatTitle = getChatTitle()
+        
+        if selectedUsers.count > 1 {
+            ids.append(uid)
+            ids = ids.sorted()
+            chatId = ids.joined(separator: "-")
+        } else {
+            let firstId = selectedUsers.first!.id
+            chatId = firstId
+        }
+        
+        onGoToMessages?(chatId, selectedUsers, chatTitle)
+    }
+    
+    private func getChatTitle() -> String {
+        if selectedUsers.count == 1 {
+            return selectedUsers.first!.name
+        } else {
+            return setMultiUsernameText()
+        }
+    }
+    
+    private func setMultiUsernameText() -> String {
+        var isFirst = true
+        var usernameText = ""
+        for user in selectedUsers {
+            if isFirst == true {
+                usernameText = user.name
+                isFirst = false
+            } else {
+                usernameText = usernameText + ", \(user.name)"
+            }
+        }
+        return usernameText
+    }
+    
+}
+
+extension NewMessageViewController: UsersManagerDelegate {
+    func currentUser(user: Users) {
+        
+    }
+    
+    func showError(error: String) {
+        print("getting users error")
+    }
+    
+    func setUsers(users: [Users]) {
+        self.users = users
+        objects.append(NewChatTokens.searchUsers.rawValue as ListDiffable)
+        adapter.performUpdates(animated: true, completion: nil)
+    }
+    
+    
 }
 
 
@@ -145,7 +215,8 @@ extension NewMessageViewController: SelectedUserDelegate {
         searchUsersCollectionSection.updateCell(user: user)
         
         checkSelectedUsers()
-        
+        doneButt.isEnabled = selectedUsers.count > 0
+
     }
     
 }
@@ -172,5 +243,6 @@ extension NewMessageViewController: UserCellDelegate {
                 adapter.performUpdates(animated: true, completion: nil)
             }
         }
+        doneButt.isEnabled = selectedUsers.count > 0
     }
 }

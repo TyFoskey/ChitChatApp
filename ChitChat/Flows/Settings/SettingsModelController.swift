@@ -56,7 +56,7 @@ class SettingsModelController {
                     dict.updateValue(strongSelf.newNumber!, forKey: "number")
                 }
                 
-                Constants.refs.userRef.updateChildValues(dict)
+                Constants.refs.userRef.child(strongSelf.uid).updateChildValues(dict)
                 completed(.success("Success"))
                 
                 

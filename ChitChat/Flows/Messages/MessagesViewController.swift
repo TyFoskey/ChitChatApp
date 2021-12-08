@@ -13,26 +13,27 @@ import IGListKit
 class MessagesViewController: UIViewController {
     
     // MARK: - Properties
-    var messages = StubData.createMessage()
-    var lastMessage: MessageViewModel?
-    var lastMessageView: MessageViewModel?
-    var lastSectionController: MessageSectionController?
+    let chatTitle: String
+    let messagesManager: MessagesManager
+    var messages = [MessageViewModel]()
     let keyboardManager = KeyboardManager()
-    var cachedNotification: KeyboardNotification?
     var isFirstLayout = true
     var keyboardHeight: CGFloat = 0
-    let backgroundView = UIView()
+    let spinnerToken = "spinner"
+    var state: CollectionState = .loading
+    var inputViewHeightConstr: Constraint!
+    var inputHeight: CGFloat = 70
     
     lazy var collectionView: MessagesCollectionView = {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
         let layout = UICollectionViewFlowLayout()
         let collection = MessagesCollectionView(frame: frame, collectionViewLayout: layout)
-        collection.backgroundColor = .white
+        collection.backgroundColor = .systemBackground
         return collection
     }()
     
     lazy var messageInputView: MessageAccessoryView = {
-        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 70)
         let footerView = MessageAccessoryView(frame: frame)
       //  footerView.photoButt.addTarget(self, action: #selector(photoTapped), for: .touchUpInside)
       //  footerView.sendButt.addTarget(self, action: #selector(sendText), for: .touchUpInside)
@@ -54,18 +55,30 @@ class MessagesViewController: UIViewController {
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         navigationController?.navigationItem.largeTitleDisplayMode = .never
         navigationItem.largeTitleDisplayMode = .never
-        navigationItem.title = "Tyler"
+        navigationItem.title = chatTitle
         adapter.collectionView = collectionView
         adapter.collectionView?.keyboardDismissMode = .interactive
         adapter.scrollViewDelegate = self
         setContraints()
         setKeyboard()
         collectionView.transform = CGAffineTransform(scaleX: 1, y: -1)
-
+        messagesManager.delgate = self
+        messageInputView.delegate = self
+        messagesManager.fetchMessages()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            self.messages = StubData.createMessage()
+//            self.state = .success
+//            self.adapter.performUpdates(animated: true, completion: nil)
+//        }
         setUpToHideKeyboardOnTapOnView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        messagesManager.observeNewMessages()
     }
     
     override func viewDidLayoutSubviews() {
@@ -73,7 +86,9 @@ class MessagesViewController: UIViewController {
         isFirstLayout = false
     }
     
-    init() {
+    init(chatId: String, users: [Users], title: String) {
+        self.messagesManager = MessagesManager(chatId: chatId, users: users)
+        self.chatTitle = title
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -84,7 +99,7 @@ class MessagesViewController: UIViewController {
     
     // MARK: - Set Up
     private func setContraints() {
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         view.addSubview(collectionView)
         view.addSubview(messageInputView)
 
@@ -96,7 +111,7 @@ class MessagesViewController: UIViewController {
         
         messageInputView.snp.makeConstraints { (make) in
             make.left.right.equalTo(view)
-            make.height.equalTo(80)
+            inputViewHeightConstr = make.height.equalTo(70).constraint
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin).offset(0)
         }
     }
@@ -106,10 +121,19 @@ class MessagesViewController: UIViewController {
 
 extension MessagesViewController: ListAdapterDataSource {
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
-        return messages as [ListDiffable]
+        var objects = messages as [ListDiffable]
+        if state == .loading {
+            objects.insert(spinnerToken as ListDiffable, at: 0)
+        }
+        return objects
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        
+        if let _ = object as? String {
+            let height: CGFloat = state == .loading ? view.bounds.height : 50
+            return SpinnerSection(height: height)
+        }
         guard let messageView = object as? MessageViewModel else {
             fatalError("not a message view")
         }
@@ -139,5 +163,51 @@ extension MessagesViewController: UIScrollViewDelegate {
             view.endEditing(true)
         }
     }
+    
+}
+
+extension MessagesViewController: MessagesManagerDelegate {
+    func setMessages(messages: [MessageViewModel]) {
+        let sortedMessages = messages.sorted(by: { $0.message.creationDate > $1.message.creationDate})
+        self.messages.append(contentsOf: sortedMessages)
+        state = .success
+        adapter.performUpdates(animated: true, completion: nil)
+    }
+    
+    func showError(error: String) {
+        
+    }
+    
+    func newMessage(message: MessageViewModel) {
+        messages.insert(message, at: 0)
+        adapter.performUpdates(animated: true, completion: nil)
+    }
+    
+    func deletedMessage(message: MessageViewModel) {
+        
+    }
+
+}
+
+
+extension MessagesViewController: MessageAccessoryDelegate {
+    func sendTapped() {
+        print("send tapped")
+        guard let text = messageInputView.textView.text else { return }
+        messagesManager.sendMessage(text: text)
+        messageInputView.textView.text = ""
+    }
+    
+    func textDidChangeHeight(height: CGFloat) {
+        guard height != inputHeight else  { return }
+        inputViewHeightConstr.update(offset: height)
+        view.updateConstraints()
+        inputHeight = height
+    }
+    
+    func textDidChange(textView: UITextView) {
+        
+    }
+    
     
 }

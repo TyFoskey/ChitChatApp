@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
 class SingleUserCell: UICollectionViewCell {
     
@@ -18,6 +19,7 @@ class SingleUserCell: UICollectionViewCell {
     let profilePicHeight: CGFloat = 60
     let deleteButtHeight: CGFloat = 20
     weak var delegate: SelectedUserDelegate?
+    let imageName = "minus.circle"
     
     var user: Users! {
         didSet {
@@ -39,7 +41,8 @@ class SingleUserCell: UICollectionViewCell {
     // MARK: - Update
     private func updateCell() {
         nameLabel.text = user.name
-        
+        guard let url = URL(string: user.profilePhotoUrl) else { return }
+        profilePic.sd_setImage(with: url, completed: nil)
     }
     
     // MARK: - Actions
@@ -53,8 +56,9 @@ class SingleUserCell: UICollectionViewCell {
         addSubview(nameLabel)
         addSubview(deleteButt)
         
+        profilePic.clipsToBounds = true
         profilePic.layer.cornerRadius = profilePicHeight / 2
-        profilePic.backgroundColor = .orange
+        profilePic.backgroundColor = .secondaryLabel
         profilePic.snp.makeConstraints { (make) in
             make.centerX.equalTo(self)
             make.centerY.equalTo(self).offset(-8)
@@ -72,13 +76,16 @@ class SingleUserCell: UICollectionViewCell {
             make.right.equalTo(self).offset(-5)
         }
         
-        deleteButt.backgroundColor = .red
+        let imageSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold)
+        let image = UIImage(systemName: imageName, withConfiguration: imageSymbolConfiguration)
+        deleteButt.setImage(image, for: .normal)
+        deleteButt.tintColor = .red
         deleteButt.layer.cornerRadius = 5
         deleteButt.addTarget(self, action: #selector(deleteButtTapped), for: .touchUpInside)
         deleteButt.snp.makeConstraints { (make) in
             make.height.width.equalTo(deleteButtHeight)
             make.bottom.equalTo(profilePic)
-            make.left.equalTo(profilePic.snp.right).offset(-3)
+            make.left.equalTo(profilePic.snp.right).offset(-10)
         }
     }
 }

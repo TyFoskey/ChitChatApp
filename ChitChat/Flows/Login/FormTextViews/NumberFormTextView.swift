@@ -51,13 +51,13 @@ class NumberFormTextField: UIView {
         phoneCodeButt.setImage(UIImage(named: "downArrow"), for: .normal)
         phoneCodeButt.semanticContentAttribute = .forceRightToLeft
         phoneCodeButt.imageEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 5, right: 5)
-        phoneCodeButt.setTitleColor(.black, for: .normal)
+        phoneCodeButt.setTitleColor(.label, for: .normal)
         topLabel.isHidden = true
         blockView.isHidden = true
         bottomView.backgroundColor = .clear
         bottomView.layer.cornerRadius = 8
         bottomView.layer.borderWidth = 2
-        bottomView.layer.borderColor = UIColor.groupTableViewBackground.cgColor
+        bottomView.layer.borderColor = UIColor.secondarySystemFill.cgColor
         phoneTextField.delegate = self
         phoneTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         phoneTextField.placeholder = "Phone number"
@@ -134,7 +134,7 @@ extension NumberFormTextField: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         bottomView.layer.sublayers?.removeAll()
-        bottomView.layer.borderColor = UIColor.groupTableViewBackground.cgColor
+        bottomView.layer.borderColor = UIColor.secondarySystemFill.cgColor
     }
     
     

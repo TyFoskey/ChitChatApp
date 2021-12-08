@@ -17,7 +17,7 @@ class SearchView: UIView {
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .white
+        collection.backgroundColor = .systemBackground
         collection.isScrollEnabled = false
         return collection
     }()
@@ -40,7 +40,7 @@ class SearchView: UIView {
         addSubview(collectionView)
         
         searchBar.searchBarStyle = .minimal
-        searchBar.placeholder = "Search for contacts"
+        searchBar.placeholder = "Search for users"
         searchBar.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(self)
         }

@@ -10,6 +10,11 @@ import UIKit
 import PhoneNumberKit
 import FloatingPanel
 
+enum VerificationType {
+    case alreadyUser(String)
+    case notUser(String, Data)
+}
+
 class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     
     // MARK: - Properties
@@ -18,24 +23,27 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     private var currentCountry = PhoneNumberKit()
     private let auth: Authentication
     var phoneNumber: String!
-    private let name: String
-    private let imageData: Data
+    private let type: VerificationType
     
     
     // MARK: - Coordinator Finish Output
     var finishFlow: ((Any?) -> Void)?
     
     // MARK: - Coordinator Lifecylce
-    init(router: Router, phoneKit: PhoneNumberKit, auth: Authentication, name: String, imageData: Data) {
+    init(router: Router, phoneKit: PhoneNumberKit, auth: Authentication, type: VerificationType) {
         self.router = router
         self.phoneKit = phoneKit
         self.auth = auth
-        self.name = name
-        self.imageData = imageData
+        self.type = type
     }
     
     func start() {
-        showPhoneNumberVC()
+        switch type {
+        case .alreadyUser(let phoneNumber):
+            showCodeVerificationVC(phoneNumber: phoneNumber)
+        case .notUser(_, _):
+            showPhoneNumberVC()
+        }
     }
     
     deinit {
@@ -113,7 +121,19 @@ class VerificationCoordinator: Coordinator, CoordinatorFinishOutput {
     }
     
     private func showCompletedVC(verificationObject: VerificationObject) {
-        let congratsVC = RegisterCompletedViewController(auth: auth, name: name, imageData: imageData, verificationObject: verificationObject)
+        var congratsVC: RegisterCompletedViewController!
+        switch type {
+        case .alreadyUser(_):
+            congratsVC = RegisterCompletedViewController(auth: auth, type: .signIn(verificationObject))
+        case .notUser(let name, let imageData):
+            congratsVC = RegisterCompletedViewController(auth: auth, type: .phoneNumber(name, imageData, verificationObject))
+        }
+        congratsVC.onBottomButtTap = {[weak self] in
+            print("finish flow")
+            guard let strongSelf = self else { return }
+            strongSelf.finishFlow?(nil)
+            
+        }
         router.push(congratsVC, hideBottomBar: true)
     }
     

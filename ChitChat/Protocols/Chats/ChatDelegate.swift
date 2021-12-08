@@ -8,6 +8,6 @@
 
 import UIKit
 
-protocol ChatDelegate: class {
-    func goToMessages(chatKey: String, chatUser: [Users], isRead: Bool)
+protocol ChatDelegate: AnyObject {
+    func goToMessages(chatViewModel: ChatViewModel, isRead: Bool)
 }

@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-protocol CodeViewDelegate: class {
+protocol CodeViewDelegate: AnyObject {
     func didChangeCharacters()
     func verifyNumber(code: String)
 }

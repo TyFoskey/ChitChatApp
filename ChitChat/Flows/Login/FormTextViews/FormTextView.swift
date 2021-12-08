@@ -33,11 +33,11 @@ class FormTextFieldView: UIView {
         textField.isSecureTextEntry = isPassword ?? false
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        blockView.backgroundColor = .white
+        blockView.backgroundColor = .systemBackground
         bottomView.backgroundColor = .clear
         bottomView.layer.cornerRadius = 8
         bottomView.layer.borderWidth = 2
-        bottomView.layer.borderColor = UIColor.groupTableViewBackground.cgColor//Colors.lightGray.cgColor
+        bottomView.layer.borderColor = UIColor.secondarySystemFill.cgColor//Colors.lightGray.cgColor
         
         
         setLabels(labelText: labelText, font: topLabelFont)

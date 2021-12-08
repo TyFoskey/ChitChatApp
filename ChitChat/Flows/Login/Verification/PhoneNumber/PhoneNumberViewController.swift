@@ -38,8 +38,9 @@ class PhoneNumberViewController: UIViewController {
     // MARK: - Set Up
     
     private func setUpView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(phoneNumberView)
+        addCustomBackButton()
         phoneNumberView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
             make.left.right.equalTo(view)

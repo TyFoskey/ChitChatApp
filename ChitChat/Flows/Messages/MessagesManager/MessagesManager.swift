@@ -6,60 +6,90 @@
 //  Copyright © 2020 ty foskey. All rights reserved.
 //
 
-import Firebase
+import FirebaseDatabase
+import FirebaseAuth
 
 class MessagesManager {
     
-    private let id: String
+    private let chatId: String
     private let uid: String
+    private let users: [Users]
     private let dataFetcher: DataFetcher
+    private let sendAPI = SendAPI()
     private var lastMessageId: String = ""
+    private var startKey: Double?
     typealias messagesCompletion = (_ result: Result<[MessageViewModel]>) -> Void
     
-    init(id: String) {
-        self.id = id
+    weak var delgate: MessagesManagerDelegate?
+    
+    init(chatId: String, users: [Users]) {
+        self.chatId = chatId
+        self.users = users
         self.uid = Auth.auth().currentUser!.uid
-        self.dataFetcher = DataFetcher(modelRef: Constants.refs.messagesRef, queryRef: Constants.refs.userMessagesRef.child(uid).child(id), id: id)
+        self.dataFetcher = DataFetcher(modelRef: Constants.refs.messagesRef, queryRef: Constants.refs.userMessagesRef.child(uid).child(chatId), id: chatId)
     }
     
+    
+    deinit {
+        Constants.refs.userMessagesRef.child(uid).child(chatId).queryOrdered(byChild: "date").removeAllObservers()
+    }
     /**
      Fetches  messages from the database.
     - Parameters:
         - startKey: the double value of where the fetch should begin.
         - completion: the handler for result callback.
      */
-    func fetchMessages(startKey: Double?, completion: @escaping messagesCompletion) {
-        dataFetcher.fetchData(t: Message.self, startingAt: startKey, orderedBy: "date", andWithReturnCount: 10) {[weak self] (result) in self?.dataHandler(startKey: startKey, result: result, completion: completion)
+    func fetchMessages() {
+        dataFetcher.fetchData(t: Message.self, startingAt: startKey, orderedBy: "date", andWithReturnCount: 100) {[weak self] (result) in
+            guard let strongSelf = self else { return }
+            strongSelf.dataHandler(startKey: strongSelf.startKey, result: result)
         }
     }
+    
+    
+    /// Sends Message to database
+    /// - Parameters:
+    ///   - text: the text
+    ///   - toId: the chatId or toId
+    ///   - users: the users in the chat
+    func sendMessage(text: String) {
+        sendAPI.uploadTextToServers(text: text, toId: chatId, users: users)
+    }
+    
     
     /**
     Observes the new messages that come in from the database.
      - Parameters:
         - chatId: the id of the chat log the observer observes new messages from.
      */
-    func observeNewMessages(chatId: String, completion: @escaping(MessageViewModel) -> Void) {
+    func observeNewMessages() {
         Constants.refs.userMessagesRef.child(uid).child(chatId).queryOrdered(byChild: "date").queryLimited(toFirst: 1).observe(.childAdded) {[weak self] (snapshot) in
             print(snapshot.key, "snap key", self?.lastMessageId, "last message id")
-            guard snapshot.key != self?.lastMessageId else { print("not equal"); return}
-            self?.lastMessageId = snapshot.key
+            guard let strongSelf = self, snapshot.key != self?.lastMessageId else {
+                print("not equal")
+                return
+            }
+            strongSelf.lastMessageId = snapshot.key
             print("about to observe message")
             
-            self?.dataFetcher.fetchFromDatabase(t: Message.self, ref: Constants.refs.messagesRef.child(snapshot.key), completion: { (message) in
-                self?.createMessageViewModel(message: message, completion: { (messageView) in
+            strongSelf.dataFetcher.fetchFromDatabase(t: Message.self, ref: Constants.refs.messagesRef.child(snapshot.key), completion: { (message) in
+                strongSelf.createMessageViewModel(message: message, completion: { (messageView) in
                     guard let newMessageView = messageView else {return}
-                    completion(newMessageView)
+                    strongSelf.delgate?.newMessage(message: newMessageView)
                 })
             })
         }
     }
     
 
-    private func dataHandler(startKey: Double?, result: Result<[DataSnapshot]>, completion: @escaping messagesCompletion) {
+    private func dataHandler(startKey: Double?, result: Result<[DataSnapshot]>) {
         let group = DispatchGroup()
         var messages = [MessageViewModel]()
         switch result {
-        case .completed(_): completion(.completed(nil))
+        case .completed(_):
+            delgate?.setMessages(messages: [])
+            //delgate?.updateLastDate(lastDate: nil)
+           // completion(.completed(nil))
         case .success(let snapshots):
             let _ = snapshots.compactMap({[weak self] in
                 guard let strongSelf = self else {return}
@@ -74,16 +104,22 @@ class MessagesManager {
                 }
             })
             
-            group.notify(queue: .main) {
+            group.notify(queue: .main) {[weak self] in
+                guard let strongSelf = self else { return }
                 if messages.count != 0 {
-                    completion(.success(messages))
+                    strongSelf.delgate?.setMessages(messages: messages)
                 }
-                guard let lastObject = snapshots.last?.value as? [String:Any], let date = lastObject["date"] as? Double, date != startKey else { completion(.completed(nil)); return}
                 
-                completion(.completed(date))
+                guard let lastObject = snapshots.last?.value as? [String:Any], let date = lastObject["date"] as? Double, date != startKey else {
+                    strongSelf.startKey = nil
+                    return
+                }
+                
+                strongSelf.startKey = date
             }
-        case .error(let errorString): completion(.error(errorString))
             
+        case .error(let errorString):
+            delgate?.showError(error: errorString)
         }
     }
     

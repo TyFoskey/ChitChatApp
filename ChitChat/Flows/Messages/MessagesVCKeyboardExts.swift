@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Firebase
 
 // MARK: - Keyboard extension
 extension MessagesViewController {

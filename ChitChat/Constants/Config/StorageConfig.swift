@@ -13,7 +13,14 @@ struct StorageConfig {
     lazy var storageRef = Storage.storage().reference(forURL: storageRootRef)
     
     private var storageRootRef: String {
-       return "gs://chitchat-8e72d.appspot.com"
+       return "YOUR STORAGE REF"
     }
     
+}
+
+
+struct SwifterConfig {
+    let CONSUMERKEY = "YOUR CONSUMER KEY"
+    let CONSUMERSECRET = "YOUR CONSUMER SECRET"
+    let CALLBACKURL = "YOUR CALLBACK URL"
 }

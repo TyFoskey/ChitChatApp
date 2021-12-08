@@ -8,7 +8,7 @@
 
 import IGListKit
 
-class ChatViewModel: ListDiffable {
+class ChatViewModel: ListDiffable, Equatable {
   
     let users: [Users]
     let messageView: MessageViewModel
@@ -75,8 +75,17 @@ class ChatViewModel: ListDiffable {
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         guard let chatView = object as? ChatViewModel else {return false}
         guard self !== object else {return true}
-        return true
-        //return users == chatView.users && id == chatView.id && messageView == chatView.messageView && isFromUser == chatView.isFromUser && timeText == chatView.timeText
+        return self == chatView
     }
+    
+    // MARK: - Equatable
+    static func == (lhs: ChatViewModel, rhs: ChatViewModel) -> Bool {
+        return lhs.users == rhs.users &&
+        lhs.id == rhs.id &&
+        lhs.messageView == rhs.messageView &&
+        lhs.isFromUser == rhs.isFromUser &&
+        lhs.timeText == rhs.timeText
+    }
+    
     
 }

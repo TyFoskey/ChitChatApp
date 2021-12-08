@@ -27,7 +27,7 @@ class TextFieldCell: UICollectionViewCell {
         addSubview(textField)
         addSubview(wordCountLabel)
         
-        topView.backgroundColor = UIColor.groupTableViewBackground
+        topView.backgroundColor = UIColor.secondarySystemBackground
         topView.snp.makeConstraints { (make) in
             make.top.right.left.equalTo(self)
             make.height.equalTo(1)

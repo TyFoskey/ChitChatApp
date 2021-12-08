@@ -6,7 +6,7 @@
 //  Copyright © 2020 ty foskey. All rights reserved.
 //
 
-import Firebase
+import FirebaseDatabase
 
 class DataFetcher {
     let modelRef: DatabaseReference
@@ -25,7 +25,11 @@ class DataFetcher {
     }
     
     
-    func fetchData<T: SnapshotProtocol>(t: T.Type, startingAt startKey: Double?, orderedBy orderChild: String, andWithReturnCount count: Int, completion: @escaping completionHandler<[DataSnapshot]>) {
+    func fetchData<T: SnapshotProtocol>(t: T.Type,
+                                        startingAt startKey: Double?,
+                                        orderedBy orderChild: String,
+                                        andWithReturnCount count: Int,
+                                        completion: @escaping completionHandler<[DataSnapshot]>) {
         
         var orderedQueryRef = queryRef.queryOrdered(byChild: orderChild)
         if startKey != nil {
@@ -36,16 +40,24 @@ class DataFetcher {
         
         orderedQueryRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let objects = snapshot.children.allObjects as? [DataSnapshot], objects.isEmpty != true else {
-                completion(.completed(nil)); return
+                completion(.completed(nil))
+                return
             }
             completion(.success(objects))
         }
     }
     
     
-    func fetchFromDatabase<T: SnapshotProtocol>(t: T.Type, ref: DatabaseReference, completion: @escaping(T?) -> Void) {
+    func fetchFromDatabase<T: SnapshotProtocol>(t: T.Type,
+                                                ref: DatabaseReference,
+                                                completion: @escaping(T?) -> Void) {
+        
         ref.observeSingleEvent(of: .value) { (snapshot) in
-            guard let dict = snapshot.value as? [String:Any] else { completion(nil); return}
+            guard let dict = snapshot.value as? [String:Any] else {
+                completion(nil)
+                return
+            }
+            
             let model = T.init(snapDict: dict, key: snapshot.key)
             completion(model)
         }

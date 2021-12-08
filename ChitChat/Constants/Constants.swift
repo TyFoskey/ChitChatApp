@@ -7,11 +7,14 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 class Constants {
     static let refs = References()
     static let validate = Validation()
     static let colors = Colors()
+    static let images = Images()
+    static let swifterConfig = SwifterConfig()
 //    static let gradients = Gradients()
     static var storageConfig = StorageConfig()
 }

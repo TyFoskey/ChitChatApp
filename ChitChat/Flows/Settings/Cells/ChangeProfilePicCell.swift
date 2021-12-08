@@ -8,12 +8,20 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
 class ChangeProfilePicCell: UICollectionViewCell {
     
     let profilePicImageView = UIImageView()
     let changeButton = UIButton()
     weak var delegate: SettingsDelegate?
+    
+    var profileUrl: String! {
+        didSet {
+            guard let url = URL(string: profileUrl) else { return }
+            profilePicImageView.sd_setImage(with: url, completed: nil)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,7 +37,8 @@ class ChangeProfilePicCell: UICollectionViewCell {
         addSubview(changeButton)
         
         profilePicImageView.layer.cornerRadius = 130 / 2
-        profilePicImageView.backgroundColor = .lightGray
+        profilePicImageView.backgroundColor = .secondaryLabel
+        profilePicImageView.clipsToBounds = true
         profilePicImageView.snp.makeConstraints { (make) in
             make.top.equalTo(self).offset(16)
             make.height.width.equalTo(130)

@@ -13,11 +13,19 @@ class SettingsView: UIView {
     lazy var collectionView: UICollectionView = {
           let layout = UICollectionViewFlowLayout()
           let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-          collection.backgroundColor = .white
+          collection.backgroundColor = .systemBackground
           return collection
       }()
       
-      let signOutButt = UIButton()
+    let signOutButt: UIButton = {
+        let button = UIButton()
+        button.setTitle("Sign Out", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(signOutTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    weak var delegate: SettingsDelegate?
     
     // MARK: Init
     override init(frame: CGRect) {
@@ -44,11 +52,14 @@ class SettingsView: UIView {
             make.bottom.equalTo(signOutButt.snp.top)
         }
         
-        signOutButt.setTitle("Sign Out", for: .normal)
-        signOutButt.setTitleColor(.white, for: .normal)
         signOutButt.snp.makeConstraints { (make) in
             make.bottom.left.right.equalTo(self)
             make.height.equalTo(50)
         }
+    }
+    
+    // MARK: - Actions
+    @objc private func signOutTapped() {
+        delegate?.signOut()
     }
 }

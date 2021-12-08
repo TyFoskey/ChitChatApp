@@ -32,8 +32,9 @@ class SettingSectionController: ListSectionController {
   
         case .profilePic:
             let cell = collectionContext!.dequeueReusableCell(of: ChangeProfilePicCell.self, for: self, at: index) as! ChangeProfilePicCell
-            cell.profilePicImageView.backgroundColor = .red
-            cell.delegate = delegate
+            cell.profilePicImageView.backgroundColor = .secondaryLabel
+            cell.profileUrl = settingViewModel.text
+            cell.delegate = self
             return cell
             
             
@@ -61,6 +62,21 @@ class SettingSectionController: ListSectionController {
     }
 }
 
+extension SettingSectionController: SettingsDelegate {
+    func changeProfilePic() {
+        delegate?.changeProfilePic()
+    }
+    
+    func textFieldDidChange(textFieldType: SettingsTextFeildType, text: String?) {
+        
+    }
+    
+    func signOut() {
+        
+    }
+
+}
+
 // MARK: - TextField Action
 extension SettingSectionController {
     @objc func textFieldDidChange(textField: UITextField) {
@@ -72,7 +88,7 @@ extension SettingSectionController {
         
         guard let maxCharCount = settingViewModel.maxCharCount, let count = textField.text?.count, count > maxCharCount else {
             cell.wordCountLabel.isHidden = true
-            cell.textField.textColor = .black
+            cell.textField.textColor = .label
             return
         }
         

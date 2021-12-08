@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0F92E307846478AF1E0B9FB08CA32A56"
+               BlueprintIdentifier = "674FDCAB4D51E702521F4CD31807F659"
+               BuildableName = "IGListKit.framework"
                BlueprintName = "IGListKit"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "IGListKit.framework">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

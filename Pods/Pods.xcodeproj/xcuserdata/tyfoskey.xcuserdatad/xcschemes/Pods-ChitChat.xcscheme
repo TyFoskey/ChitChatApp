@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "59AA42EFCF1C3392460B50C4303FEF2B"
+               BlueprintIdentifier = "2BF2203D7645025F0A3FB4FE0DD0C890"
                BuildableName = "Pods_ChitChat.framework"
                BlueprintName = "Pods-ChitChat"
                ReferencedContainer = "container:Pods.xcodeproj">

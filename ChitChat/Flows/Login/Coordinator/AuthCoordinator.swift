@@ -28,7 +28,8 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     }
     
     override func start() {
-        showSignIn(isStarting: true)
+        showLoginVC()
+        //showSignIn(isStarting: true)
     }
     
     deinit {
@@ -37,88 +38,118 @@ final class AuthCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     
     
     // MARK: - Show VCs
-    private func showSignIn(isStarting: Bool) {
-        let signInVC = SignInViewController(auth: auth)
-        signInVC.onBottomButtTap = { [weak self] (verificationId) in
+    private func showLoginVC() {
+        let loginVC = LoginViewController()
+        loginVC.onGoToPhoneLogin = {[weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.showVerification()
+            strongSelf.showSignIn()
+        }
+        
+        loginVC.onGoToCheckSignIn = {[weak self] type in
+            guard let strongSelf = self else { return }
+            strongSelf.showCompletedVC(type: type)
+        }
+        router.setRootModule(loginVC, hideBorderLine: true)
+    }
+    private func showSignIn() {
+        let signInVC = SignInViewController(auth: auth)
+        signInVC.onBottomButtTap = { [weak self] (phoneNumber) in
+            guard let strongSelf = self else { return }
+            strongSelf.showVerification(type: .alreadyUser(phoneNumber))
         }
         
         signInVC.onSignUpButtTap = {[weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.showOtherVC(isStarting: isStarting, isSignIn: true)
+            strongSelf.showSignUp()
         }
         
-        if isStarting == true {
-            router.setRootModule(signInVC, hideBorderLine: true)
-        } else {
-            router.push(signInVC, animated: true)
-        }
+        router.push(signInVC, animated: true)
+        
     }
     
-    private func showSignUp(isStarting: Bool) {
+    private func showSignUp() {
         let signUpVC = SignUpViewController()
         
         signUpVC.onSignInButtTap = { [weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.showOtherVC(isStarting: isStarting, isSignIn: false)
+            //strongSelf.showOtherVC(isStarting: isStarting, isSignIn: false)
+            strongSelf.router.popModule()
         }
-        
-        if isStarting == true {
-            router.setRootModule(signUpVC, hideBorderLine: true)
-        } else {
-            router.push(signUpVC, animated: true)
-        }
-        
+            
         signUpVC.onBottomButtTap = {[weak self] (name) in
             guard let strongSelf = self else { return }
             strongSelf.name = name
-            strongSelf.showProfilePicVC()
+            strongSelf.showProfilePicVC(name: nil, id: nil)
         }
+        
+        router.push(signUpVC, animated: true)
         
     }
     
-    private func showOtherVC(isStarting: Bool, isSignIn: Bool) {
-        if isStarting == true, isSignIn == true {
-            showSignUp(isStarting: false)
-        } else if isStarting == true, isSignIn == false {
-            showSignIn(isStarting: false)
-        } else {
-            router.popModule()
-        }
-    }
+//    private func showOtherVC(isStarting: Bool, isSignIn: Bool) {
+//        if isStarting == true, isSignIn == true {
+//            showSignUp(isStarting: false)
+//        } else if isStarting == true, isSignIn == false {
+//            showSignIn(isStarting: false)
+//        } else {
+//            router.popModule()
+//        }
+//    }
     
     // Verifies the user and returns either an email or phone number
-    private func showVerification() {
+    private func showVerification(type: VerificationType) {
         let phoneKit = PhoneNumberKit()
-        let verificationCoordinator = VerificationCoordinator(router: router, phoneKit: phoneKit, auth: auth, name: name, imageData: imageData)
+        let verificationCoordinator = VerificationCoordinator(router: router, phoneKit: phoneKit, auth: auth, type: type)
         
-        verificationCoordinator.finishFlow = { [weak self] (verificationObject) in
-            guard let verificationObject = verificationObject as? VerificationObject,
-                    let strongSelf = self else { return }
-            
-            strongSelf.verificationObject = verificationObject
+        verificationCoordinator.finishFlow = { [weak self] _ in
+            guard let strongSelf = self else { return }
+
             strongSelf.removeChildCoordinator(verificationCoordinator)
-            strongSelf.goToMainVC()
-            print("your verified")
+            strongSelf.finishFlow?(nil)
+            print("you're verified")
         }
         self.addChildCoordinator(verificationCoordinator)
         verificationCoordinator.start()
     }
     
-    private func showProfilePicVC() {
-        let profilePicVC = RegisterProfilePicViewController()
+    private func showProfilePicVC(name: String?, id: String?) {
+        let profilePicVC = RegisterProfilePicViewController(name: name, id: id)
         
         profilePicVC.onBottomButtTap = {[weak self] (image) in
             guard let strongSelf = self,
                   let imageData = image.jpegData(compressionQuality: 0.5) else { return }
             strongSelf.imageData = imageData
-            strongSelf.showVerification()
+            strongSelf.showVerification(type: .notUser(strongSelf.name, imageData))
+        }
+        
+        profilePicVC.onGoToCreateProfile = {[weak self] type in
+            guard let strongSelf = self else { return }
+            strongSelf.showCompletedVC(type: type)
+            
         }
         
         router.push(profilePicVC, hideBottomBar: true)
     }
     
+    private func showCompletedVC(type: SignInRegistrationType) {
+        let congratsVC = RegisterCompletedViewController(auth: auth, type: type)
+        congratsVC.onBottomButtTap = {[weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.finishFlow?(nil)
+        }
+        
+        congratsVC.onGoToRegisterProfile = {[weak self] in
+            guard let strongSelf = self else { return }
+            switch type {
+            case .social(let id, let name, _):
+                strongSelf.showProfilePicVC(name: name, id: id)
+                
+            default:
+                fatalError("Should not get here")
+            }
+        }
+        router.push(congratsVC, hideBottomBar: true)
+    }
     
     private func goToMainVC() {
         let mainCoordinator = MainCoordinator(router: router)

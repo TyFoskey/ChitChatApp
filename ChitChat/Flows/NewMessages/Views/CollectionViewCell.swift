@@ -14,7 +14,7 @@ class CollectionViewCell: UICollectionViewCell {
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .white
+        collection.backgroundColor = .systemBackground
         return collection
     }()
     
@@ -39,7 +39,7 @@ class CollectionViewCell: UICollectionViewCell {
             make.edges.equalTo(self)
         }
         
-        bottomView.backgroundColor = UIColor.groupTableViewBackground
+        bottomView.backgroundColor = UIColor.secondarySystemBackground
         bottomView.snp.makeConstraints { (make) in
             make.bottom.equalTo(self)
             make.left.right.equalTo(self)

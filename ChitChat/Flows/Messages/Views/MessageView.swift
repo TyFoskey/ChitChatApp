@@ -13,7 +13,7 @@ class MessageView: UIView {
     
     let bubbleView: UIView = {
         let bubble = UIView()
-        bubble.backgroundColor = .white
+        bubble.backgroundColor = .systemBackground
         bubble.layer.cornerRadius = 18
         bubble.layer.masksToBounds = true
         bubble.translatesAutoresizingMaskIntoConstraints = false
@@ -24,7 +24,7 @@ class MessageView: UIView {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont.systemFont(ofSize: 17)
-        label.textColor = UIColor.black
+        label.textColor = UIColor.label
         label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -61,8 +61,8 @@ class MessageView: UIView {
     
     
     override func layoutSubviews() {
-        gradientLayer.frame = bubbleView.frame
-        bubbleView.layer.insertSublayer(gradientLayer, at: 0)
+//        gradientLayer.frame = bubbleView.frame
+//        bubbleView.layer.insertSublayer(gradientLayer, at: 0)
         self.layer.shadowPath = UIBezierPath(roundedRect: bubbleView.bounds, cornerRadius: 18).cgPath
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ChatCell: UICollectionViewCell {
     
@@ -27,6 +28,7 @@ class ChatCell: UICollectionViewCell {
         super.init(frame: frame)
         setBorderView()
         setProfilePhoto()
+        self.addSubview(timeLabel)
         setUsernameLabel()
         setTimeLabel()
         setMessageLabel()
@@ -38,16 +40,18 @@ class ChatCell: UICollectionViewCell {
         messageLabel.text = chatView.messageText
         timeLabel.text = chatView.timeText
         bubbleView.isHidden = chatView.messageView.message.isRead ?? false
+        guard let url = URL(string: chatView.photoUrl) else { return }
+        profilePic.sd_setImage(with: url, completed: nil)
     }
     
     private func setBorderView() {
         self.addSubview(borderView)
         borderView.layer.cornerRadius = 18
         borderView.layer.borderWidth = 1.2
-        borderView.layer.borderColor = UIColor.groupTableViewBackground.cgColor
-        borderView.backgroundColor = .white
-        borderView.layer.shadowOpacity = 0.2
-        borderView.layer.shadowColor = UIColor.gray.cgColor
+        borderView.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        borderView.backgroundColor = .systemBackground
+        borderView.layer.shadowOpacity = 0.1
+        borderView.layer.shadowColor = UIColor.secondarySystemBackground.cgColor
         borderView.layer.shadowOffset = CGSize(width: 6, height: 7)
         borderView.layer.shadowRadius = 6
         borderView.snp.makeConstraints { (make) in
@@ -60,7 +64,8 @@ class ChatCell: UICollectionViewCell {
     
     private func setProfilePhoto() {
         self.addSubview(profilePic)
-        profilePic.backgroundColor = .orange
+        profilePic.clipsToBounds = true
+        profilePic.backgroundColor = .secondaryLabel
         profilePic.layer.cornerRadius = 55 / 2
         
         profilePic.snp.makeConstraints { (make) in
@@ -76,6 +81,8 @@ class ChatCell: UICollectionViewCell {
         usernameLabel.snp.makeConstraints { (make) in
             make.left.equalTo(profilePic.snp.right).offset(12)
             make.top.equalTo(profilePic).offset(6)
+            make.right.equalTo(timeLabel.snp.left).offset(-6)
+
             
         }
     }
@@ -83,7 +90,7 @@ class ChatCell: UICollectionViewCell {
     private func setMessageLabel() {
         self.addSubview(messageLabel)
         messageLabel.font = UIFont.systemFont(ofSize: 13.5, weight: .medium)
-        messageLabel.textColor = .darkGray
+        messageLabel.textColor = .secondaryLabel
         messageLabel.numberOfLines = 2
         
         messageLabel.snp.makeConstraints { (make) in
@@ -106,13 +113,14 @@ class ChatCell: UICollectionViewCell {
     }
     
     private func setTimeLabel() {
-        self.addSubview(timeLabel)
         timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        timeLabel.textColor = .darkGray
+        timeLabel.textColor = .secondaryLabel
         
         timeLabel.snp.makeConstraints { (make) in
             make.right.equalTo(borderView).offset(-12)
             make.top.equalTo(usernameLabel).offset(-1)
+            make.width.equalTo(50)
+
         }
     }
     

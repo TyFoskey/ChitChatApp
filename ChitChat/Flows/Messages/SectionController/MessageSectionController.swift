@@ -30,33 +30,30 @@ class MessageSectionController: ListSectionController {
     }
     
     override func sizeForItem(at index: Int) -> CGSize {
-        let height = messageViewModel.cellHeight - (showProfilePic && messageViewModel.isFrom == false ? 16 : 0)
+        let height = messageViewModel.cellHeight
         return CGSize(width: collectionContext!.containerSize.width, height: height)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        print(messageViewModel.messageKind, "messageKind")
-        switch messageViewModel.messageKind {
-        case .text:
-            let cell = collectionContext!.dequeueReusableCell(of: MessageTextCell.self, for: self, at: index) as! MessageTextCell
-            cell.transform = CGAffineTransform(scaleX: 1, y: -1)
+        print(messageViewModel.isFrom, "isFrom")
+        if messageViewModel.isFrom == true {
+            let cell = collectionContext!.dequeueReusableCell(of: FromMessageTextCell.self, for: self, at: index) as! FromMessageTextCell
+           // cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             cell.messageViewModel = messageViewModel
-            cell.profileImageView.isHidden = showProfilePic
-         //   cell.delegate = delegate
+            //   cell.delegate = delegate
             return cell
-            
-       
-        case .photo:
-            let cell = collectionContext!.dequeueReusableCell(of: MessageImageCell.self, for: self, at: index) as! MessageImageCell
+        } else {
+            let cell = collectionContext!.dequeueReusableCell(of: ToMessageTextCell.self, for: self, at: index) as! ToMessageTextCell
+           // cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             cell.messageViewModel = messageViewModel
+            //   cell.delegate = delegate
             return cell
-            
         }
     }
     
-    func hideProfileImage() {
-        guard let cell = collectionContext!.cellForItem(at: 0, sectionController: self) as? MessageTextCell else { return }
-        cell.profileImageView.isHidden = true
-    }
+//    func hideProfileImage() {
+//        guard let cell = collectionContext!.cellForItem(at: 0, sectionController: self) as? MessageTextCell else { return }
+//        cell.profileImageView.isHidden = true
+//    }
     
 }

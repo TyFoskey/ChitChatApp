@@ -20,6 +20,7 @@ class TextCell: UICollectionViewCell {
     
     private func setUp() {
         addSubview(textLabel)
+        textLabel.textColor = .label
         textLabel.numberOfLines = 0
         textLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self)

@@ -33,12 +33,12 @@ class CountryPickerVC: UIViewController {
         searchController.searchBar.tintColor = .blue
         let cancelButt = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
         navigationItem.leftBarButtonItem = cancelButt
-        navigationItem.rightBarButtonItem?.tintColor = .black
+        navigationItem.rightBarButtonItem?.tintColor = .label
         navigationItem.title = "Choose your country"
         navigationItem.hidesSearchBarWhenScrolling = false
    //     navigationItem.searchController = searchController
      //   pickerVC. = self
-        navigationController?.navigationBar.barTintColor = .white
+        navigationController?.navigationBar.barTintColor = .systemBackground
         pickerVCTableView.insetsContentViewsToSafeArea = true
         pickerVCTableView.dataSource = pickerVC
         pickerVCTableView.delegate = pickerVC

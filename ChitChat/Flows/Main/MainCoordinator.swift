@@ -8,8 +8,10 @@
 
 import UIKit
 
-final class MainCoordinator: BaseCoordinator {
+final class MainCoordinator: BaseCoordinator, CoordinatorFinishOutput {
+    
     let router: Router
+    var finishFlow: ((Any?) -> Void)?
     
     override func start() {
         showChatsVC()
@@ -20,7 +22,7 @@ final class MainCoordinator: BaseCoordinator {
     }
     
     deinit {
-        
+        print("deiniting main coordinator")
     }
     
     private func showAuthCoordinator() {
@@ -37,10 +39,10 @@ final class MainCoordinator: BaseCoordinator {
     
     private func showChatsVC() {
         let chatsVC = ChatsViewController()
-        chatsVC.onGoToMessages = {[weak self] in
+        chatsVC.onGoToMessages = {[weak self] chatViewModel in
             print("on go")
             guard let strongSelf = self else { return }
-            strongSelf.showMessagesVC()
+            strongSelf.showMessagesVC(chatId: chatViewModel.id, users: chatViewModel.users, chatTitle: chatViewModel.usernameText)
         }
         
         chatsVC.onCreateNewMessage = {[weak self] in
@@ -60,14 +62,19 @@ final class MainCoordinator: BaseCoordinator {
         router.setRootModule(chatsVC)
     }
     
-    private func showMessagesVC() {
+    private func showMessagesVC(chatId: String, users: [Users], chatTitle: String) {
         print("should be going to messages")
-        let messagesVC = MessagesViewController()
+        let messagesVC = MessagesViewController(chatId: chatId, users: users, title: chatTitle)
         router.push(messagesVC)
     }
     
     private func showNewMessageVC() {
         let newMessagesVC = NewMessageViewController()
+        newMessagesVC.onGoToMessages = {[weak self] chatId, users, chatTitle in
+            guard let strongSelf = self else { return }
+            strongSelf.showMessagesVC(chatId: chatId, users: users, chatTitle: chatTitle)
+            strongSelf.router.navigationController?.viewControllers.remove(at: 1)
+        }
         router.push(newMessagesVC)
     }
     
@@ -79,8 +86,10 @@ final class MainCoordinator: BaseCoordinator {
     private func showSettingsVC() {
         let settingsVC = SettingsViewController()
       
-        settingsVC.onSignOut = {
+        settingsVC.onSignOut = {[weak self] in
+            guard let strongSelf = self else { return }
             print("sign outt")
+            strongSelf.finishFlow?(nil)
         }
         router.push(settingsVC)
     }

@@ -41,6 +41,6 @@ class ChatSectionController: ListSectionController {
     
     override func didSelectItem(at index: Int) {
         print("did select")
-        delegate?.goToMessages(chatKey: chatView.id, chatUser: chatView.users, isRead: chatView.messageView.message.isRead ?? true)
+        delegate?.goToMessages(chatViewModel: chatView, isRead: chatView.messageView.message.isRead ?? true)
     }
 }

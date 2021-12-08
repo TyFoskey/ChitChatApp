@@ -22,8 +22,9 @@ class SignInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.setHidesBackButton(true, animated: true)
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(signInView)
+        addCustomBackButton()
         signInView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
             make.left.right.equalTo(view)
@@ -49,7 +50,7 @@ class SignInViewController: UIViewController {
     // MARK: - Keyboard Manager
     private func setKeyboard() {
         keyboardManager.on(event: .willShow) {[weak self] (notification) in
-            self?.animateButton(to: -notification.endFrame.height)
+            self?.animateButton(to: -notification.endFrame.height - 10)
         }
         
         keyboardManager.on(event: .willHide) {[weak self] (notification) in
@@ -60,18 +61,28 @@ class SignInViewController: UIViewController {
     
     private func animateButton(to height: CGFloat) {
           UIView.animate(withDuration: 0.55, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2, options: .curveEaseOut, animations: {[weak self] in
-              self?.signInView.loginButt.snp.updateConstraints { (make) in
-                  make.bottom.equalTo(height)
-              }
+
+              self?.signInView.loginButtBottomConstr.update(offset: height)
+              self?.setNumberFormConstraints(height: height)
               self?.signInView.layoutIfNeeded()
           }, completion: nil)
         
       }
     
+    private func setNumberFormConstraints(height: CGFloat) {
+        if height != -50 {
+            signInView.numberFormCenterConstr.deactivate()
+            signInView.numberFormBottomConstr.activate()
+        } else {
+            signInView.numberFormBottomConstr.deactivate()
+            signInView.numberFormCenterConstr.activate()
+        }
+    }
+    
 }
 
 // MARK: - TextField Delegate
-extension SignInViewController: LoginViewDelegate {
+extension SignInViewController: SignInDelegate {
     func switchViewsButtTapped() {
         onSignUpButtTap?()
     }
@@ -98,12 +109,12 @@ extension SignInViewController: LoginViewDelegate {
             return
         }
         
-        
-        authentication.signIn(text: numberText) {[weak self] (result) in
+        let text = "+1\(numberText)"
+        authentication.signIn(text: text) {[weak self] (result) in
                                 guard let strongSelf = self else { return }
                                 switch result {
-                                case .success(let verificaionId):
-                                    strongSelf.onBottomButtTap?(verificaionId)
+                                case .success(let phoneNumber):
+                                    strongSelf.onBottomButtTap?(phoneNumber)
                                 case .error(let errorMessage):
                                     strongSelf.signInView.errorLabel.text = errorMessage
                                     strongSelf.signInView.loginButt.isEnabled = true

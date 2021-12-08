@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
 class MultiChatCell: UICollectionViewCell {
     
@@ -44,9 +45,13 @@ class MultiChatCell: UICollectionViewCell {
         usernameLabel.text = chatViewModel.usernameText
         messageLabel.text = chatViewModel.messageText
         timeLabel.text = chatViewModel.timeText
-        bubbleView.isHidden = chatViewModel.messageView.message.isRead ?? false
-      //  let photoId = chatViewModel.photoUrl
-     //   let secondUrl = chatViewModel.users[1].profilePhotoUrl
+        bubbleView.isHidden = true//chatViewModel.messageView.message.isRead ?? false
+        let photoId = chatViewModel.photoUrl
+        let secondUrlString = chatViewModel.users[1].profilePhotoUrl
+        
+        guard let firstUrl = URL(string: photoId), let secondUrl = URL(string: secondUrlString) else { return }
+        firstProfilePic.sd_setImage(with: firstUrl, completed: nil)
+        secondProfilePic.sd_setImage(with: secondUrl, completed: nil)
         
     }
     
@@ -68,10 +73,10 @@ class MultiChatCell: UICollectionViewCell {
     private func setBorderView() {
         borderView.layer.cornerRadius = 18
         borderView.layer.borderWidth = 1.2
-        borderView.layer.borderColor = UIColor.groupTableViewBackground.cgColor
-        borderView.backgroundColor = .white
+        borderView.layer.borderColor = UIColor.secondarySystemFill.cgColor
+        borderView.backgroundColor = .systemBackground
         borderView.layer.shadowOpacity = 0.2
-        borderView.layer.shadowColor = UIColor.gray.cgColor
+        borderView.layer.shadowColor = UIColor.secondarySystemBackground.cgColor
         borderView.layer.shadowOffset = CGSize(width: 6, height: 7)
         borderView.layer.shadowRadius = 6
         borderView.snp.makeConstraints { (make) in
@@ -84,15 +89,17 @@ class MultiChatCell: UICollectionViewCell {
     
     private func setProfilePics() {
         firstProfilePic.layer.cornerRadius = profileHeight / 2
-        firstProfilePic.backgroundColor = Constants.colors.primaryColor
+        firstProfilePic.clipsToBounds = true
+        firstProfilePic.backgroundColor = .secondaryLabel
         firstProfilePic.snp.makeConstraints { (make) in
             make.left.equalTo(borderView).offset(16)
             make.height.width.equalTo(profileHeight)
             make.top.equalTo(borderView).offset(16)
         }
         
+        secondProfilePic.clipsToBounds = true
         secondProfilePic.layer.cornerRadius = firstProfilePic.layer.cornerRadius
-        secondProfilePic.backgroundColor = Constants.colors.secondaryColor
+        secondProfilePic.backgroundColor = .secondaryLabel
         secondProfilePic.snp.makeConstraints { (make) in
             make.height.width.equalTo(firstProfilePic)
             make.bottom.equalTo(borderView).offset(-14)
@@ -107,11 +114,12 @@ class MultiChatCell: UICollectionViewCell {
             make.left.equalTo(firstProfilePic.snp.right).offset(20)
             make.top.equalTo(firstProfilePic).offset(0)
             make.right.equalTo(timeLabel.snp.left).offset(-6)
+           // make.right.equalTo(timeLabel.snp.left).offset(-6)
         }
         
         // Message
         messageLabel.font = UIFont.systemFont(ofSize: 13.5, weight: .medium)
-        messageLabel.textColor = .darkGray
+        messageLabel.textColor = .secondaryLabel
         messageLabel.numberOfLines = 2
         messageLabel.snp.makeConstraints { (make) in
             make.right.equalTo(timeLabel.snp.left).offset(-16)
@@ -121,10 +129,11 @@ class MultiChatCell: UICollectionViewCell {
         
         // Time Label
         timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
-        timeLabel.textColor = .darkGray
+        timeLabel.textColor = .secondaryLabel
         timeLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(borderView).offset(-12)
+            make.right.equalTo(borderView.snp.right).offset(-12)
             make.top.equalTo(usernameLabel).offset(-1)
+            make.width.equalTo(50)
         }
     }
     

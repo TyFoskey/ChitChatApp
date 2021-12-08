@@ -7,7 +7,11 @@
 //
 
 import UIKit
-import Firebase
+import FirebaseDatabase
+import FirebaseAuth
+import FBSDKLoginKit
+import SwifteriOS
+import GoogleSignIn
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -22,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-        let navController = UINavigationController()
+        let navController = UINavigationController(rootViewController: UIViewController())
         let router = Router(navigationController: navController)
         applicationCoordinator = AppCoordinator(router: router)
 
@@ -31,6 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = navController//router.toPresent()//applicationCoordinator.router.toPresent()
         // self.window = window
         window?.makeKeyAndVisible()
+        AppDelegate.shared.window = window
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 
@@ -61,6 +66,33 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        for urlContext in URLContexts {
+            let url = urlContext.url
+            
+            Auth.auth().canHandle(url)
+            GIDSignIn.sharedInstance.handle(url)
+            Swifter.handleOpenURL(url, callbackURL: url)
+
+        }
+        
+        guard let url = URLContexts.first?.url else {
+            return
+        }
+        
+        
+
+
+        ApplicationDelegate.shared.application(
+            UIApplication.shared,
+            open: url,
+            sourceApplication: nil,
+            annotation: [UIApplication.OpenURLOptionsKey.annotation]
+        )
+    }
+    
+ 
 
 
 }

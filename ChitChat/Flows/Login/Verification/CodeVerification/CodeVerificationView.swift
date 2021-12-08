@@ -23,12 +23,14 @@ class CodeVerificationView: UIView {
     let errorLabel = UILabel()
     let phoneNumber: String
     
-    
+    weak var delegate: CodeVerificationViewDelegate?
 
     // MARK: - Init
     init(phoneNumber: String, frame: CGRect) {
         self.phoneNumber = phoneNumber
         super.init(frame: frame)
+        codeView.delegate = self
+        sendAgainButt.addTarget(self, action: #selector(sendAgainTapped), for: .touchUpInside)
         addSubview(topLabel)
         addSubview(descriptionLabel)
         addSubview(phoneNumberButt)
@@ -129,8 +131,12 @@ class CodeVerificationView: UIView {
         circleSpinner.isHidden = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {[weak self] in
             guard let strongSelf = self else { return }
-            strongSelf.codeView.delegate?.verifyNumber(code: strongSelf.codeView.getVerificationCode())
+            strongSelf.delegate?.verifyNumber(code: strongSelf.codeView.getVerificationCode())
         }
+    }
+    
+    @objc private func sendAgainTapped() {
+        delegate?.resendCode()
     }
     
     
@@ -143,5 +149,15 @@ class CodeVerificationView: UIView {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension CodeVerificationView: CodeViewDelegate {
+    func didChangeCharacters() {
+        delegate?.didChangeCharacters()
+    }
+    
+    func verifyNumber(code: String) {
+        
     }
 }

@@ -14,7 +14,7 @@ class Users: SnapshotProtocol {
     let name: String
     let id: String
     let profilePhotoUrl: String
-    let phoneNumber: String
+    let phoneNumber: String?
     
     init(name: String, id: String, profilePhotoUrl: String, phoneNumber: String) {
         self.name = name
@@ -25,9 +25,9 @@ class Users: SnapshotProtocol {
     
     required init(snapDict: [String : Any], key: String) {
         self.id = key
-        self.profilePhotoUrl = snapDict["profilePhotoUrl"] as! String
+        self.profilePhotoUrl = snapDict["profileUrl"] as! String
         self.name = snapDict["name"] as! String
-        self.phoneNumber = snapDict["phoneNumber"] as! String
+        self.phoneNumber = snapDict["phoneNumber"] as? String
     }
     
     

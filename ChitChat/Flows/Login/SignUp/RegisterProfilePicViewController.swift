@@ -16,8 +16,11 @@ class RegisterProfilePicViewController: UIViewController {
     let registerProfileView = RegisterProfilePicView()
     let assetManager = AssetManager()
     var onBottomButtTap: ((UIImage) -> Void)?
+    var onGoToCreateProfile: ((SignInRegistrationType) -> Void)?
     var onChangeProfilePicTap: (() -> Void)?
     var isImageLoaded = false
+    let name: String?
+    let id: String?
    
     
     // MARK: - View Lifecycle
@@ -31,8 +34,9 @@ class RegisterProfilePicViewController: UIViewController {
     
     private func setView() {
         self.navigationItem.setHidesBackButton(true, animated: true)
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.addSubview(registerProfileView)
+        addCustomBackButton()
         registerProfileView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin)
             make.left.right.equalTo(view)
@@ -42,9 +46,11 @@ class RegisterProfilePicViewController: UIViewController {
     }
     
     // MARK: - Init
-    init() {
-           super.init(nibName: nil, bundle: nil)
-       }
+    init(name: String?, id: String?) {
+        self.name = name
+        self.id = id
+        super.init(nibName: nil, bundle: nil)
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -79,7 +85,12 @@ extension RegisterProfilePicViewController: RegisterProfilePicDelegate {
     func bottomButtTapped() {
         print("bottom but tapped")
         guard let image = registerProfileView.profilePicImageView.image else { return }
-        onBottomButtTap?(image)
+        if name != nil, let imageData = image.jpegData(compressionQuality: 0.5) {
+            // go to verification sign in
+            onGoToCreateProfile?(.createProfile(id!, name!, imageData))
+        } else {
+            onBottomButtTap?(image)
+        }
     }
     
 }

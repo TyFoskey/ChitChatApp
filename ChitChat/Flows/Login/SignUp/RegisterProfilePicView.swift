@@ -56,7 +56,7 @@ class RegisterProfilePicView: UIView {
     // MARK: - Set Up
     
     private func setUp() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         topLabel.textAlignment = .center
         topLabel.text = titleText
         topLabel.font = UIFont.systemFont(ofSize: 34, weight: .semibold) //26
@@ -77,9 +77,9 @@ class RegisterProfilePicView: UIView {
         changePicButt.setTitleColor(Constants.colors.buttonBlue, for: .normal)
         changePicButt.addTarget(self, action: #selector(changePic), for: .touchUpInside)
        
-        bottomButt.setTitle("Sign Up", for: .normal)
+        bottomButt.setTitle("Next", for: .normal)
         bottomButt.isEnabled = false
-        bottomButt.backgroundColor = .gray
+        bottomButt.backgroundColor = UIColor.placeholderText
         bottomButt.addTarget(self, action: #selector(bottomButtTapped), for: .touchUpInside)
         
         setConstraints()

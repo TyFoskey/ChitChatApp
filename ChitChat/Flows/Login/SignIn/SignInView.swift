@@ -7,21 +7,80 @@
 //
 
 import UIKit
+import SnapKit
 
 class SignInView: UIView {
     
-    // MARK: - Properties
-    let titleLabel = UILabel()
-    let titleLabelMaskView = UIView()
-    let subtitleLabel = UILabel()
+    // MARK: - Views
+    let titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = "Welcome Back,"
+        titleLabel.backgroundColor = .clear
+        titleLabel.layer.shadowOpacity = 0.2
+        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
+        titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
+        titleLabel.layer.shadowRadius = 3
+        titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
+        titleLabel.textColor = .label
+        return titleLabel
+    }()
+    
+    let titleLabelMaskView: UIView = {
+        let titleLabelMaskView = UIView()
+        titleLabelMaskView.backgroundColor = .red
+        return titleLabelMaskView
+    }()
+    
+    let subtitleLabel: UILabel = {
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "Sign in with your phone number to continue!"
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        subtitleLabel.textColor = .secondaryLabel//Constants.colors.lightGray
+        return subtitleLabel
+    }()
+    
+    let notUserLabel: UILabel = {
+        let notUserLabel = UILabel()
+        notUserLabel.text = "Don't have an account yet?"
+        notUserLabel.textColor = .label
+        notUserLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        notUserLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(signUpButtTapped)))
+        notUserLabel.isUserInteractionEnabled = true
+        return notUserLabel
+    }()
+  
+    let errorLabel: UILabel = {
+        let errorLabel = UILabel()
+        errorLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        errorLabel.textColor = .red
+        return errorLabel
+    }()
+    
+    let signUpLabel: UILabel = {
+        let signUpLabel = UILabel()
+        signUpLabel.text = "Sign Up"
+        signUpLabel.backgroundColor = .clear
+        signUpLabel.textColor = .label
+        signUpLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        return signUpLabel
+    }()
+    
+    let signUpButtMaskView: UIView = {
+        let signUpButtMaskView = UIView()
+        signUpButtMaskView.backgroundColor = .red
+        return signUpButtMaskView
+    }()
+    
     let loginButt = LoginButt()
     let numberForm = FormTextFieldView(labelText: "PHONE NUMBER", placeholder: "Phone Number", image: UIImage(named: "signupProfile"), frame: .zero)
-    let notUserLabel = UILabel()
-    let errorLabel = UILabel()
-    let signUpLabel = UILabel()
-    let signUpButtMaskView = UIView()
+    
+    // MARK: - Properties
     let colorGradients = Constants.colors.colorGradients
-    weak var delegate: LoginViewDelegate?
+    weak var delegate: SignInDelegate?
+    var numberFormCenterConstr: Constraint!
+    var numberFormBottomConstr: Constraint!
+    var loginButtBottomConstr: Constraint!
     
     
     // MARK: - View Lifecycle
@@ -55,36 +114,12 @@ class SignInView: UIView {
     
     // MARK: - Set Up
     private func setUp() {
-        self.backgroundColor = .white
-        titleLabelMaskView.backgroundColor = .red
-        titleLabel.text = "Welcome Back,"
-        titleLabel.backgroundColor = .clear
-        titleLabel.layer.shadowOpacity = 0.2
-        titleLabel.layer.shadowColor = Constants.colors.primaryColor.cgColor
-        titleLabel.layer.shadowOffset = CGSize(width: 4, height: 3)
-        titleLabel.layer.shadowRadius = 3
-        titleLabel.font = UIFont.systemFont(ofSize: 37, weight: .semibold)
-        titleLabel.textColor = .black//Colors.primaryColor
-        subtitleLabel.text = "Sign in with your phone number to continue!"
-        subtitleLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        subtitleLabel.textColor = Constants.colors.lightGray
-        notUserLabel.text = "Don't have an account yet?"
-        notUserLabel.textColor = .black
-        notUserLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        errorLabel.font = UIFont.systemFont(ofSize: 20, weight: .medium)
-        errorLabel.textColor = .red
-        signUpButtMaskView.backgroundColor = .red
-        signUpButtMaskView.isUserInteractionEnabled = false
-        signUpLabel.text = "Sign Up"
-        signUpLabel.backgroundColor = .clear
-        signUpLabel.textColor = .black
-        signUpLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        loginButt.addTarget(self, action: #selector(loginButtTapped), for: .touchUpInside)
-        numberForm.delegate = self
+        self.backgroundColor = .systemBackground
         signUpButtMaskView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(signUpButtTapped)))
         signUpButtMaskView.isUserInteractionEnabled = true
-        notUserLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(signUpButtTapped)))
-        notUserLabel.isUserInteractionEnabled = true
+        loginButt.addTarget(self, action: #selector(loginButtTapped), for: .touchUpInside)
+        numberForm.delegate = self
+    
         addSubviews()
         setConstraints()
     }
@@ -101,10 +136,11 @@ class SignInView: UIView {
         addSubview(signUpLabel)
     }
     
+    
     private func setConstraints() {
         
         titleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self).offset(0)
+            make.top.equalTo(self).offset(40)
             make.leading.equalTo(self).offset(30)
         }
         
@@ -118,26 +154,33 @@ class SignInView: UIView {
         subtitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.equalTo(titleLabel)
+            make.trailing.equalTo(self).offset(-30)
         }
         
         numberForm.snp.makeConstraints { (make) in
-            make.centerY.equalTo(self).offset(0)
+            numberFormBottomConstr = make.bottom.equalTo(loginButt.snp.top).offset(-30).constraint
+            numberFormCenterConstr = make.centerY.equalTo(self).constraint
             make.leading.equalTo(titleLabel)
             make.trailing.equalTo(self).offset(-30)
             make.height.equalTo(65)
         }
         
+        numberFormCenterConstr.activate()
+        numberFormBottomConstr.deactivate()
+        
         errorLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(numberForm.snp.bottom).offset(16)
+            make.bottom.equalTo(numberForm.snp.top).offset(-12)
             make.left.right.equalTo(numberForm)
         }
         
         
         loginButt.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self).offset(-50)
+            loginButtBottomConstr = make.bottom.equalTo(self).offset(-50).constraint
             make.leading.trailing.equalTo(numberForm)
             make.height.equalTo(50)
         }
+        
+        loginButtBottomConstr.activate()
         
         notUserLabel.snp.makeConstraints { (make) in
             make.top.equalTo(loginButt.snp.bottom).offset(12)

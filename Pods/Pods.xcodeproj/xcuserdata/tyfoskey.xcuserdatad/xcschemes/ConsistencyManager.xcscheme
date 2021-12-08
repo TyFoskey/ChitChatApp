@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1100"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "2FD7AD31842596051CCB9958DFCEC67A"
+               BlueprintIdentifier = "D1DE7D34A6BD71FF12B4E92841E9A434"
+               BuildableName = "ConsistencyManager.framework"
                BlueprintName = "ConsistencyManager"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "ConsistencyManager.framework">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
